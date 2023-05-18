@@ -22,7 +22,7 @@ public class CriancasModel implements Serializable {
     @Column(nullable = false)
     private String nome;
     @Column(nullable = false)
-    private Enum diagnostico; //TEA TDAH DI TOD OUTROS SEM_DIAG
+    private String diagnostico; //TEA TDAH DI TOD OUTROS SEM_DIAG
     @Column(nullable = false)
     private LocalDateTime dataDeNascimento;
     @Column

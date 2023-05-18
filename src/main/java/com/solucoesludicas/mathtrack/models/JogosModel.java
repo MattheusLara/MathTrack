@@ -24,6 +24,6 @@ public class JogosModel implements Serializable {
     private String descricaoDoJogo;
 
 
-    @Column(nullable = false)
-    private int dificuldadeDaFase; // Adicionar?
+//    @Column(nullable = false)
+//    private int dificuldadeDaFase; // Adicionar?
 }
