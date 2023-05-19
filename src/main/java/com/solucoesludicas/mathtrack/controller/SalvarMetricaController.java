@@ -6,7 +6,6 @@ import com.solucoesludicas.mathtrack.service.SalvarMetricaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,7 +15,6 @@ import java.time.ZoneId;
 
 
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 public class SalvarMetricaController {
     private final SalvarMetricaService salvarMetricaService;
@@ -30,5 +28,4 @@ public class SalvarMetricaController {
 
         return ResponseEntity.ok(salvarMetricaService.execute(metricasJogoModel));
     }
-
 }

@@ -12,7 +12,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "metricas_jogo")
-public class MetricasJogoModel implements Serializable {
+public class ResultadosTauUModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -23,19 +23,13 @@ public class MetricasJogoModel implements Serializable {
     @Column(nullable = false)
     private UUID especialistaUUID;
     @Column(nullable = false)
-    private long jogoID;
+    private double tauUAcertos;
     @Column(nullable = false)
-    private int numeroDaFase;
+    private double tauUErros;
     @Column(nullable = false)
-    private int dificuldadeDaFase;
+    private double tauUTempo;
     @Column(nullable = false)
-    private int taxaDeAcertos;
+    private boolean condicoesAdequadas;
     @Column(nullable = false)
-    private int taxaDeErros; //numero ou %?
-    @Column
-    private int tempoSessao;
-    @Column(nullable = false)
-    private LocalDateTime dataSessao;
-    @Column
-    private boolean condicoesAdequadas; //ambiente do teste estressor, elementos distratores, passou mal, estresse previo, outros, cond adequadas.
+    private LocalDateTime dataCalculo;
 }
