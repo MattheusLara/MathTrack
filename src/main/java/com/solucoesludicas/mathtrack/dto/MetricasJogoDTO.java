@@ -15,6 +15,6 @@ public class MetricasJogoDTO {
     private int dificuldadeDaFase;
     private int taxaDeAcertos;
     private int taxaDeErros;
-    private int tempoConclusao;
+    private int tempoSessao;
     private boolean condicoesAdequadas;
 }

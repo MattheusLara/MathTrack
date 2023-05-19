@@ -1,19 +1,19 @@
 package com.solucoesludicas.mathtrack.utils;
 
-import java.util.List;
-
 import lombok.experimental.UtilityClass;
 import org.apache.commons.math3.fitting.PolynomialCurveFitter;
 import org.apache.commons.math3.fitting.WeightedObservedPoints;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.stat.regression.SimpleRegression;
 
+import java.util.List;
+
 // Essa classe é responsável por calcular a estatística Tau-U.
 // Tau-U é uma medida de associação bivariada que é baseada no coeficiente de correlação de Kendall.
 @UtilityClass
 public class CalculadoraTauU {
     // Este método recebe duas listas de valores (linha base e intervenção) e retorna o valor calculado da estatística Tau-U.
-    public Double calcularTauU(List<Double> linhaBase, List<Double> intervencao) {
+    public static Double calcularTauU(List<Double> linhaBase, List<Double> intervencao) throws Exception {
         try {
             // n1 e n2 são as contagens de valores nas duas listas, respectivamente.
             int n1 = linhaBase.size();
@@ -53,16 +53,15 @@ public class CalculadoraTauU {
                 ajusteTendencia = calcularAjusteTendenciaNaoLinear(linhaBase, intervencao);
             }
 
-            tauU -= ajusteTendencia;
+            //tauU -= ajusteTendencia;
 
             double ajusteSobreposicao = calcularSobreposicao(linhaBase, intervencao);
-            tauU -= ajusteSobreposicao;
+            //tauU -= ajusteSobreposicao;
 
             // Retornamos o valor final da estatística Tau-U.
             return tauU;
         } catch (Exception ex) {
-            // Se houver algum erro durante o cálculo, registramos a mensagem de erro.
-            return null;
+            throw new Exception("Erro ao calcular Tau-U");
         }
     }
 
@@ -79,7 +78,13 @@ public class CalculadoraTauU {
             regressaoIntervencao.addData(i, intervencao.get(i));
         }
 
-        return regressaoLinhaBase.getSlope() - regressaoIntervencao.getSlope();
+        // O coeficiente de tendência é a diferença entre os coeficientes lineares
+        double ajusteTendencia = regressaoLinhaBase.getSlope() - regressaoIntervencao.getSlope();
+
+        // Normalização do ajuste de tendência
+        ajusteTendencia = ajusteTendencia / (linhaBase.size() * intervencao.size());
+
+        return ajusteTendencia;
     }
 
     // Este método é responsável por calcular o ajuste de tendência não-linear.
@@ -100,7 +105,12 @@ public class CalculadoraTauU {
         double[] coeficientesIntervencao = ajustador.fit(pontosIntervencao.toList());
 
         // O coeficiente de tendência é a diferença entre os coeficientes lineares
-        return coeficientesLinhaBase[1] - coeficientesIntervencao[1];
+        double ajusteTendencia = coeficientesLinhaBase[1] - coeficientesIntervencao[1];
+
+        // Normalização do ajuste de tendência
+        ajusteTendencia = ajusteTendencia / (linhaBase.size() * intervencao.size());
+
+        return ajusteTendencia;
     }
 
     //Verifica se os dados da linha de base e intervensao sao lineares ou nao
@@ -123,7 +133,7 @@ public class CalculadoraTauU {
 
     // Este método é responsável por calcular a sobreposição entre os dois conjuntos de dados.
     // Ele determina a quantidade de valores na linha base que caem dentro do intervalo de valores na intervenção e vice-versa.
-    public double calcularSobreposicao(List<Double> linhaBase, List<Double> intervencao) {
+    private double calcularSobreposicao(List<Double> linhaBase, List<Double> intervencao) {
         DescriptiveStatistics estatisticasLinhaBase = new DescriptiveStatistics();
         for (Double valor : linhaBase) {
             estatisticasLinhaBase.addValue(valor);
