@@ -16,7 +16,9 @@ public class CuidadorModel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    private UUID uuid;
+    @Column(nullable = false)
+    private String criancaUUID;
     @Column(unique = true, nullable = false, length = 512)
     private String email;
     @Column(length = 20, nullable = false)

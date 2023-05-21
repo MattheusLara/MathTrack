@@ -1,5 +1,6 @@
 package com.solucoesludicas.mathtrack.dto;
 
+import com.solucoesludicas.mathtrack.enums.CondicoesAdequadasEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,5 +17,5 @@ public class MetricasJogoDTO {
     private int taxaDeAcertos;
     private int taxaDeErros;
     private int tempoSessao;
-    private boolean condicoesAdequadas;
+    private CondicoesAdequadasEnum condicoesAdequadas;
 }

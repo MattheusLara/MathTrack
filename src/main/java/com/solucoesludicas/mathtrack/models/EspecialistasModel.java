@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -18,13 +16,11 @@ public class EspecialistasModel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    private UUID uuid;
     @Column(unique = true, nullable = false, length = 512)
     private String email;
     @Column(unique = true, nullable = false, length = 512)
     private String senha;
-    @ElementCollection(fetch = FetchType.EAGER)
-    private List<String> roles = new ArrayList<>();
     @Column(nullable = false)
     private String nome;
     @Column

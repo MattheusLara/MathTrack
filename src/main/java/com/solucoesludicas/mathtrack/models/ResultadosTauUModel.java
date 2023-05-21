@@ -11,7 +11,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name = "metricas_jogo")
+@Table(name = "resultado_tau_u")
 public class ResultadosTauUModel implements Serializable {
     private static final long serialVersionUID = 1L;
 

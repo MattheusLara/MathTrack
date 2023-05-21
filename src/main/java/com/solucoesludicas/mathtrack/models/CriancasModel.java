@@ -1,5 +1,6 @@
 package com.solucoesludicas.mathtrack.models;
 
+import com.solucoesludicas.mathtrack.enums.DiagnosticoEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,8 +22,9 @@ public class CriancasModel implements Serializable {
     private String email;
     @Column(nullable = false)
     private String nome;
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String diagnostico; //TEA TDAH DI TOD OUTROS SEM_DIAG
+    private DiagnosticoEnum diagnostico;
     @Column(nullable = false)
     private LocalDateTime dataDeNascimento;
     @Column

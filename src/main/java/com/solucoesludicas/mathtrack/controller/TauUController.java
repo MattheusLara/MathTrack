@@ -17,7 +17,7 @@ public class TauUController {
     private final CalcularTauUService calcularTauUService;
 
     @GetMapping("/obter-tauU")
-    public ResponseEntity<ResultadosTauUDTO> obeterTauU(@RequestHeader UUID criancaUuid){
-        return ResponseEntity.ok(calcularTauUService.execute(criancaUuid));
+    public ResponseEntity<ResultadosTauUDTO> obeterTauU(@RequestHeader UUID criancaUuid, @RequestHeader boolean somenteCondicoesAdequadas){
+        return ResponseEntity.ok(calcularTauUService.execute(criancaUuid, somenteCondicoesAdequadas));
     }
 }

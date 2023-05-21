@@ -1,5 +1,6 @@
 package com.solucoesludicas.mathtrack.models;
 
+import com.solucoesludicas.mathtrack.enums.CondicoesAdequadasEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,13 +30,13 @@ public class MetricasJogoModel implements Serializable {
     @Column(nullable = false)
     private int dificuldadeDaFase;
     @Column(nullable = false)
-    private int taxaDeAcertos;
+    private int numeroDeAcertos;
     @Column(nullable = false)
-    private int taxaDeErros; //numero ou %?
+    private int numeroDeErros; //numero ou %?
     @Column
     private int tempoSessao;
-    @Column(nullable = false)
     private LocalDateTime dataSessao;
-    @Column
-    private boolean condicoesAdequadas; //ambiente do teste estressor, elementos distratores, passou mal, estresse previo, outros, cond adequadas.
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private CondicoesAdequadasEnum condicoesAdequadas;
 }
