@@ -16,7 +16,7 @@ public class CalculadoraTauU {
     private int concordanteLinhaBase;
     private int discordanteLinhaBase;
 
-    public static Double calcularTauU(List<Double> linhaBase, List<Double> intervencao) throws Exception {
+    public static Double calcularTauU(List<Double> linhaBase, List<Double> intervencao, boolean maiorMelhor) throws Exception {
         try {
             // n1 e n2 são as contagens de valores nas duas listas, respectivamente.
             n1 = linhaBase.size();
@@ -27,7 +27,11 @@ public class CalculadoraTauU {
             discordanteLinhaBase = 0;
             double tauU = 0;
 
-            calcularConcordantesEDiscodantes(linhaBase, intervencao);
+            if(maiorMelhor){
+                calcularConcordantesEDiscodantesMaiorMelhor(linhaBase, intervencao);
+            }else {
+                calcularConcordantesEDiscodantesMenorMelhor(linhaBase, intervencao);
+            }
 
             // A estatística Tau-U é calculada como a diferença entre a proporção de pares concordantes e discordantes,
             // subtraído da proporção de pares concordantes e discordantes na linha de base.
@@ -36,7 +40,12 @@ public class CalculadoraTauU {
             }
 
             if(necessarioAjusteTendencia(linhaBase)){
-                calcularTauNaLinhaDeBase(linhaBase);
+                if(maiorMelhor){
+                    calcularTauNaLinhaDeBaseMaiorMelhor(linhaBase);
+                }
+                else{
+                    calcularTauNaLinhaDeBaseMenorMelhor(linhaBase);
+                }
 
                 //Romovendo tendencia da linha sobre o calculo de Tau-U
                 if ((concordante + discordante) != 0 && (concordanteLinhaBase + discordanteLinhaBase) != 0) {
@@ -53,7 +62,7 @@ public class CalculadoraTauU {
         }
     }
 
-    private void calcularConcordantesEDiscodantes(List<Double> linhaBase, List<Double> intervencao){
+    private void calcularConcordantesEDiscodantesMaiorMelhor(List<Double> linhaBase, List<Double> intervencao){
         // Através de um loop aninhado, comparamos todos os valores na linha base com todos os valores na intervenção.
         for (int i = 0; i < n1; i++) {
             for (int j = 0; j < n2; j++) {
@@ -71,8 +80,26 @@ public class CalculadoraTauU {
         }
     }
 
-    private void calcularTauNaLinhaDeBase(List<Double> linhaBase){
-        // Calculamos a tendência na linha de base.
+    private void calcularConcordantesEDiscodantesMenorMelhor(List<Double> linhaBase, List<Double> intervencao){
+        // Através de um loop aninhado, comparamos todos os valores na linha base com todos os valores na intervenção.
+        for (int i = 0; i < n1; i++) {
+            for (int j = 0; j < n2; j++) {
+                double valorLinhaBase = linhaBase.get(i);
+                double valorIntervencao = intervencao.get(j);
+
+                // Se o valor da linha base for menor que o valor da intervenção, incrementamos a contagem concordante.
+                // Se o valor da linha base for maior, incrementamos a contagem discordante.
+                if (valorLinhaBase > valorIntervencao) {
+                    concordante++;
+                } else if (valorLinhaBase < valorIntervencao) {
+                    discordante++;
+                }
+            }
+        }
+    }
+
+    private void calcularTauNaLinhaDeBaseMaiorMelhor(List<Double> linhaBase){
+        // Através de um loop aninhado, comparamos todos os valores na linha base com todos os valores nela mesma para medir a tendencia.
         for (int i = 0; i < n1 - 1; i++) {
             double valorLinhaBase1 = linhaBase.get(i);
             double valorLinhaBase2 = linhaBase.get(i+1);
@@ -80,6 +107,20 @@ public class CalculadoraTauU {
             if (valorLinhaBase1 < valorLinhaBase2) {
                 concordanteLinhaBase++;
             } else if (valorLinhaBase1 > valorLinhaBase2) {
+                discordanteLinhaBase++;
+            }
+        }
+    }
+
+    private void calcularTauNaLinhaDeBaseMenorMelhor(List<Double> linhaBase){
+        // Através de um loop aninhado, comparamos todos os valores na linha base com todos os valores nela mesma para medir a tendencia.
+        for (int i = 0; i < n1 - 1; i++) {
+            double valorLinhaBase1 = linhaBase.get(i);
+            double valorLinhaBase2 = linhaBase.get(i+1);
+
+            if (valorLinhaBase1 > valorLinhaBase2) {
+                concordanteLinhaBase++;
+            } else if (valorLinhaBase1 < valorLinhaBase2) {
                 discordanteLinhaBase++;
             }
         }

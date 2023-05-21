@@ -29,8 +29,8 @@ public class CalcularTauUServiceImpl implements CalcularTauUService {
         var temposSessoes = obterListaDeTempoPelasMetricas(metricasJogoCrianca);
 
         var tauAcerto = calcularTauUPelaListaCompleta(taxasAcertos, true);
-        var tauErro = calcularTauUPelaListaCompleta(taxasErros, true);
-        var tauTempo = calcularTauUPelaListaCompleta(temposSessoes, true);
+        var tauErro = calcularTauUPelaListaCompleta(taxasErros, false);
+        var tauTempo = calcularTauUPelaListaCompleta(temposSessoes, false);
 
         return ResultadosTauUDTO.builder().TauUAcerto(tauAcerto).TauUErro(tauErro).TauUTempo(tauTempo).build();
     }
@@ -51,7 +51,7 @@ public class CalcularTauUServiceImpl implements CalcularTauUService {
         var linhaDeIntervencao = listaCompleta.subList(meio, listaCompleta.size());
 
         try {
-            return CalculadoraTauU.calcularTauU(linhaDeBase, linhaDeIntervencao);
+            return CalculadoraTauU.calcularTauU(linhaDeBase, linhaDeIntervencao, maiorMelhor);
         }
         catch (Exception ex){
             return 0;
