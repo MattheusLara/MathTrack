@@ -1,10 +1,7 @@
 package com.solucoesludicas.mathtrack.utils;
 
 import lombok.experimental.UtilityClass;
-import org.apache.commons.math3.fitting.PolynomialCurveFitter;
-import org.apache.commons.math3.fitting.WeightedObservedPoints;
-import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
-import org.apache.commons.math3.stat.regression.SimpleRegression;
+import org.apache.commons.math3.stat.correlation.KendallsCorrelation;
 
 import java.util.List;
 
@@ -20,8 +17,9 @@ public class CalculadoraTauUBackUp {
             int n2 = intervencao.size();
             int concordante = 0;
             int discordante = 0;
+            int concordanteLinhaBase = 0;
+            int discordanteLinhaBase = 0;
             double tauU = 0;
-            double ajusteTendencia;
 
             // Através de um loop aninhado, comparamos todos os valores na linha base com todos os valores na intervenção.
             for (int i = 0; i < n1; i++) {
@@ -45,126 +43,55 @@ public class CalculadoraTauUBackUp {
                 tauU = (concordante - discordante) / (double) (concordante + discordante);
             }
 
-            // Ajustes na estatística Tau-U para tendência e sobreposição.
-            if(saoLineares(linhaBase, intervencao)){
-                ajusteTendencia = calcularAjusteTendenciaLinear(linhaBase, intervencao);
+            if(necessarioAjusteTendencia(linhaBase)){
+                // Calculamos a tendência na linha de base.
+                for (int i = 0; i < n1 - 1; i++) {
+                    double valorLinhaBase1 = linhaBase.get(i);
+                    double valorLinhaBase2 = linhaBase.get(i+1);
+
+                    if (valorLinhaBase1 < valorLinhaBase2) {
+                        concordanteLinhaBase++;
+                    } else if (valorLinhaBase1 > valorLinhaBase2) {
+                        discordanteLinhaBase++;
+                    }
+                }
+
+                // A estatística Tau-U é calculada como a diferença entre a proporção de pares concordantes e discordantes,
+                // subtraído da proporção de pares concordantes e discordantes na linha de base.
+                if ((concordante + discordante) != 0 && (concordanteLinhaBase + discordanteLinhaBase) != 0) {
+                    double tauUBase = (concordanteLinhaBase - discordanteLinhaBase) / (double) (concordanteLinhaBase + discordanteLinhaBase);
+                    tauU = (tauU - tauUBase);
+                }
             }
-            else{
-                ajusteTendencia = calcularAjusteTendenciaNaoLinear(linhaBase, intervencao);
-            }
 
-            tauU -= ajusteTendencia;
-
-            double ajusteSobreposicao = calcularSobreposicao(linhaBase, intervencao);
-            tauU -= ajusteSobreposicao;
-
-            // Retornamos o valor final da estatística Tau-U.
             return tauU;
         } catch (Exception ex) {
             throw new Exception("Erro ao calcular Tau-U");
         }
     }
 
-    // Este método é responsável por calcular o ajuste de tendência linear.
-    // Ele usa regressão linear simples para calcular as inclinações das linhas de melhor ajuste para os dois conjuntos de dados e retorna a diferença entre elas.
-    private double calcularAjusteTendenciaLinear(List<Double> linhaBase, List<Double> intervencao) {
-        SimpleRegression regressaoLinhaBase = new SimpleRegression();
-        for (int i = 0; i < linhaBase.size(); i++) {
-            regressaoLinhaBase.addData(i, linhaBase.get(i));
+    private boolean necessarioAjusteTendencia(List<Double> linhaBase) throws Exception {
+        try {
+            // Convertemos a lista de Double para um array de primitivos double para usar na função de correlação.
+            double[] arrayLinhaBase = linhaBase.stream().mapToDouble(d -> d).toArray();
+
+            // Calculamos a correlação de Kendall.
+            KendallsCorrelation kendall = new KendallsCorrelation();
+            double correlacao = kendall.correlation(arrayLinhaBase, criarIndices(linhaBase.size()));
+
+            // Se a correlação de Kendall é significativa (por exemplo, maior que 0.5 ou menor que -0.5),
+            // então assumimos que há uma tendência e que um ajuste de tendência é necessário.
+            return Math.abs(correlacao) > 0.5;
+        } catch (Exception ex) {
+            throw new Exception("Erro ao verificar a necessidade de ajuste de tendência", ex);
         }
-
-        SimpleRegression regressaoIntervencao = new SimpleRegression();
-        for (int i = 0; i < intervencao.size(); i++) {
-            regressaoIntervencao.addData(i, intervencao.get(i));
-        }
-
-        // O coeficiente de tendência é a diferença entre os coeficientes lineares
-        double ajusteTendencia = regressaoLinhaBase.getSlope() - regressaoIntervencao.getSlope();
-
-        // Normalização do ajuste de tendência
-        ajusteTendencia = ajusteTendencia / (linhaBase.size() * intervencao.size());
-
-        return ajusteTendencia;
     }
 
-    // Este método é responsável por calcular o ajuste de tendência não-linear.
-    // Ele usa ajuste de curva polinomial para calcular os coeficientes do polinômio de segundo grau que melhor se ajusta aos dois conjuntos de dados e retorna a diferença entre os coeficientes lineares.
-    private double calcularAjusteTendenciaNaoLinear(List<Double> linhaBase, List<Double> intervencao) {
-        PolynomialCurveFitter ajustador = PolynomialCurveFitter.create(2);  // Ajuste polinomial de 2º grau
-
-        WeightedObservedPoints pontosLinhaBase = new WeightedObservedPoints();
-        for (int i = 0; i < linhaBase.size(); i++) {
-            pontosLinhaBase.add(i, linhaBase.get(i));
+    private double[] criarIndices(int tamanho) {
+        double[] indices = new double[tamanho];
+        for (int i = 0; i < tamanho; i++) {
+            indices[i] = i;
         }
-        double[] coeficientesLinhaBase = ajustador.fit(pontosLinhaBase.toList());
-
-        WeightedObservedPoints pontosIntervencao = new WeightedObservedPoints();
-        for (int i = 0; i < intervencao.size(); i++) {
-            pontosIntervencao.add(i, intervencao.get(i));
-        }
-        double[] coeficientesIntervencao = ajustador.fit(pontosIntervencao.toList());
-
-        // O coeficiente de tendência é a diferença entre os coeficientes lineares
-        double ajusteTendencia = coeficientesLinhaBase[1] - coeficientesIntervencao[1];
-
-        // Normalização do ajuste de tendência
-        ajusteTendencia = (ajusteTendencia / (linhaBase.size() * intervencao.size()));
-
-        return ajusteTendencia;
-    }
-
-    //Verifica se os dados da linha de base e intervensao sao lineares ou nao
-    private boolean saoLineares(List<Double> linhaBase, List<Double> intervencao) {
-        SimpleRegression regressaoLinhaBase = new SimpleRegression();
-        SimpleRegression regressaoIntervencao = new SimpleRegression();
-
-        for (int i = 0; i < linhaBase.size(); i++) {
-            regressaoLinhaBase.addData(i, linhaBase.get(i));
-        }
-
-        for (int i = 0; i < intervencao.size(); i++) {
-            regressaoIntervencao.addData(i, intervencao.get(i));
-        }
-
-        // Verifica se R² está próximo de 1 para ambos os conjuntos de dados.
-        double limiar = 0.95;  // O valor do limiar pode ser ajustado de acordo com a necessidade.
-        return (regressaoLinhaBase.getRSquare() > limiar && regressaoIntervencao.getRSquare() > limiar);
-    }
-
-    // Este método é responsável por calcular a sobreposição entre os dois conjuntos de dados.
-    // Ele determina a quantidade de valores na linha base que caem dentro do intervalo de valores na intervenção e vice-versa.
-    private double calcularSobreposicao(List<Double> linhaBase, List<Double> intervencao) {
-        DescriptiveStatistics estatisticasLinhaBase = new DescriptiveStatistics();
-        for (Double valor : linhaBase) {
-            estatisticasLinhaBase.addValue(valor);
-        }
-
-        DescriptiveStatistics estatisticasIntervencao = new DescriptiveStatistics();
-        for (Double valor : intervencao) {
-            estatisticasIntervencao.addValue(valor);
-        }
-
-        double minimoLinhaBase = estatisticasLinhaBase.getMin();
-        double maximoLinhaBase = estatisticasLinhaBase.getMax();
-
-        double minimoIntervencao = estatisticasIntervencao.getMin();
-        double maximoIntervencao = estatisticasIntervencao.getMax();
-
-        int contagemSobreposicao = 0;
-        for (Double valor : linhaBase) {
-            if (valor >= minimoIntervencao && valor <= maximoIntervencao) {
-                contagemSobreposicao++;
-            }
-        }
-
-        for (Double valor : intervencao) {
-            if (valor >= minimoLinhaBase && valor <= maximoLinhaBase) {
-                contagemSobreposicao++;
-            }
-        }
-
-        double totalPontos = (linhaBase.size() + intervencao.size());
-
-        return contagemSobreposicao / totalPontos;
+        return indices;
     }
 }

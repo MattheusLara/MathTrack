@@ -1,6 +1,5 @@
 package com.solucoesludicas.mathtrack.utils;
 
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.math3.stat.correlation.KendallsCorrelation;
 import org.apache.commons.math3.distribution.NormalDistribution;
@@ -8,7 +7,6 @@ import org.apache.commons.math3.distribution.NormalDistribution;
 import java.util.List;
 
 @UtilityClass
-@RequiredArgsConstructor
 public class TesteMannKendall {
     // Nível de significância para o teste estatístico
     private static final double alpha = 0.05;

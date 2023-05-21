@@ -9,56 +9,40 @@ import java.util.List;
 // Tau-U é uma medida de associação bivariada que é baseada no coeficiente de correlação de Kendall.
 @UtilityClass
 public class CalculadoraTauU {
+    private int n1;
+    private int n2;
+    private int concordante;
+    private int discordante;
+    private int concordanteLinhaBase;
+    private int discordanteLinhaBase;
+
     public static Double calcularTauU(List<Double> linhaBase, List<Double> intervencao) throws Exception {
         try {
             // n1 e n2 são as contagens de valores nas duas listas, respectivamente.
-            int n1 = linhaBase.size();
-            int n2 = intervencao.size();
-            int concordante = 0;
-            int discordante = 0;
-            int concordanteLinhaBase = 0;
-            int discordanteLinhaBase = 0;
+            n1 = linhaBase.size();
+            n2 = intervencao.size();
+            concordante = 0;
+            discordante = 0;
+            concordanteLinhaBase = 0;
+            discordanteLinhaBase = 0;
             double tauU = 0;
 
-            // Através de um loop aninhado, comparamos todos os valores na linha base com todos os valores na intervenção.
-            for (int i = 0; i < n1; i++) {
-                for (int j = 0; j < n2; j++) {
-                    double valorLinhaBase = linhaBase.get(i);
-                    double valorIntervencao = intervencao.get(j);
+            calcularConcordantesEDiscodantes(linhaBase, intervencao);
 
-                    // Se o valor da linha base for menor que o valor da intervenção, incrementamos a contagem concordante.
-                    // Se o valor da linha base for maior, incrementamos a contagem discordante.
-                    if (valorLinhaBase < valorIntervencao) {
-                        concordante++;
-                    } else if (valorLinhaBase > valorIntervencao) {
-                        discordante++;
-                    }
-                }
-            }
-
-            // A estatística Tau-U é calculada como a diferença entre a proporção de pares concordantes e discordantes.
-            // Se a soma dos pares concordantes e discordantes for diferente de zero, nós calculamos Tau-U normalmente.
+            // A estatística Tau-U é calculada como a diferença entre a proporção de pares concordantes e discordantes,
+            // subtraído da proporção de pares concordantes e discordantes na linha de base.
             if((concordante + discordante) != 0){
                 tauU = (concordante - discordante) / (double) (concordante + discordante);
             }
 
             if(necessarioAjusteTendencia(linhaBase)){
-                // Calculamos a tendência na linha de base.
-                for (int i = 0; i < n1 - 1; i++) {
-                    double valorLinhaBase1 = linhaBase.get(i);
-                    double valorLinhaBase2 = linhaBase.get(i+1);
+                calcularTauNaLinhaDeBase(linhaBase);
 
-                    if (valorLinhaBase1 < valorLinhaBase2) {
-                        concordanteLinhaBase++;
-                    } else if (valorLinhaBase1 > valorLinhaBase2) {
-                        discordanteLinhaBase++;
-                    }
-                }
-
-                // A estatística Tau-U é calculada como a diferença entre a proporção de pares concordantes e discordantes,
-                // subtraído da proporção de pares concordantes e discordantes na linha de base.
+                //Romovendo tendencia da linha sobre o calculo de Tau-U
                 if ((concordante + discordante) != 0 && (concordanteLinhaBase + discordanteLinhaBase) != 0) {
+                    //Realizando calculo de Tau-U para linha de base
                     double tauUBase = (concordanteLinhaBase - discordanteLinhaBase) / (double) (concordanteLinhaBase + discordanteLinhaBase);
+                    //Subtrai o resultado bruto de Tau-U com o resultado de Tau-U da linha de base para remover a tendencia.
                     tauU = (tauU - tauUBase);
                 }
             }
@@ -66,6 +50,38 @@ public class CalculadoraTauU {
             return tauU;
         } catch (Exception ex) {
             throw new Exception("Erro ao calcular Tau-U");
+        }
+    }
+
+    private void calcularConcordantesEDiscodantes(List<Double> linhaBase, List<Double> intervencao){
+        // Através de um loop aninhado, comparamos todos os valores na linha base com todos os valores na intervenção.
+        for (int i = 0; i < n1; i++) {
+            for (int j = 0; j < n2; j++) {
+                double valorLinhaBase = linhaBase.get(i);
+                double valorIntervencao = intervencao.get(j);
+
+                // Se o valor da linha base for menor que o valor da intervenção, incrementamos a contagem concordante.
+                // Se o valor da linha base for maior, incrementamos a contagem discordante.
+                if (valorLinhaBase < valorIntervencao) {
+                    concordante++;
+                } else if (valorLinhaBase > valorIntervencao) {
+                    discordante++;
+                }
+            }
+        }
+    }
+
+    private void calcularTauNaLinhaDeBase(List<Double> linhaBase){
+        // Calculamos a tendência na linha de base.
+        for (int i = 0; i < n1 - 1; i++) {
+            double valorLinhaBase1 = linhaBase.get(i);
+            double valorLinhaBase2 = linhaBase.get(i+1);
+
+            if (valorLinhaBase1 < valorLinhaBase2) {
+                concordanteLinhaBase++;
+            } else if (valorLinhaBase1 > valorLinhaBase2) {
+                discordanteLinhaBase++;
+            }
         }
     }
 
