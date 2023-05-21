@@ -51,10 +51,7 @@ public class CalcularTauUServiceImpl implements CalcularTauUService {
         var linhaDeIntervencao = listaCompleta.subList(meio, listaCompleta.size());
 
         try {
-            if (maiorMelhor){
-                return CalculadoraTauU.calcularTauU(linhaDeBase, linhaDeIntervencao);
-            }
-            return 0;
+            return CalculadoraTauU.calcularTauU(linhaDeBase, linhaDeIntervencao);
         }
         catch (Exception ex){
             return 0;

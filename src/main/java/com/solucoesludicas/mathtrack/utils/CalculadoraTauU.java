@@ -42,7 +42,7 @@ public class CalculadoraTauU {
                 tauU = (concordante - discordante) / (double) (concordante + discordante);
             }
 
-            if(1+1 == 2){
+            if(necessarioAjusteTendencia(linhaBase)){
                 // Calculamos a tendência na linha de base.
                 for (int i = 0; i < n1 - 1; i++) {
                     double valorLinhaBase1 = linhaBase.get(i);
