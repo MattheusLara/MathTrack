@@ -41,10 +41,10 @@ public class CalculadoraTauU {
 
             if(necessarioAjusteTendencia(linhaBase)){
                 if(maiorMelhor){
-                    calcularTauNaLinhaDeBaseMaiorMelhor(linhaBase);
+                    calcularConcordantesEDiscodantesNaLinhaDeBaseMaiorMelhor(linhaBase);
                 }
                 else{
-                    calcularTauNaLinhaDeBaseMenorMelhor(linhaBase);
+                    calcularConcordantesEDiscodantesNaLinhaDeBaseMenorMelhor(linhaBase);
                 }
 
                 //Romovendo tendencia da linha sobre o calculo de Tau-U
@@ -98,7 +98,7 @@ public class CalculadoraTauU {
         }
     }
 
-    private void calcularTauNaLinhaDeBaseMaiorMelhor(List<Double> linhaBase){
+    private void calcularConcordantesEDiscodantesNaLinhaDeBaseMaiorMelhor(List<Double> linhaBase){
         // Através de um loop aninhado, comparamos todos os valores na linha base com todos os valores nela mesma para medir a tendencia.
         for (int i = 0; i < n1 - 1; i++) {
             double valorLinhaBase1 = linhaBase.get(i);
@@ -112,7 +112,7 @@ public class CalculadoraTauU {
         }
     }
 
-    private void calcularTauNaLinhaDeBaseMenorMelhor(List<Double> linhaBase){
+    private void calcularConcordantesEDiscodantesNaLinhaDeBaseMenorMelhor(List<Double> linhaBase){
         // Através de um loop aninhado, comparamos todos os valores na linha base com todos os valores nela mesma para medir a tendencia.
         for (int i = 0; i < n1 - 1; i++) {
             double valorLinhaBase1 = linhaBase.get(i);

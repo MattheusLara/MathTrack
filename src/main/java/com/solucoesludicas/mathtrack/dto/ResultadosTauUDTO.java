@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @Builder
 public class ResultadosTauUDTO {
-    private double TauUAcerto;
-    private double TauUErro;
-    private double TauUTempo;
+    private double tauUAcerto;
+    private double tauUErro;
+    private double tauUTempo;
 }

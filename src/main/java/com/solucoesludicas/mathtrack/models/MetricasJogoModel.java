@@ -35,6 +35,7 @@ public class MetricasJogoModel implements Serializable {
     private int numeroDeErros; //numero ou %?
     @Column
     private int tempoSessao;
+    @Column
     private LocalDateTime dataSessao;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

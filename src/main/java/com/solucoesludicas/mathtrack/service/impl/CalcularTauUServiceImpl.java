@@ -21,34 +21,53 @@ public class CalcularTauUServiceImpl implements CalcularTauUService {
 
     @Override
     @Transactional
-    public ResultadosTauUDTO execute(UUID uuid, boolean somenteCondicoesAdequadas) {
-        var metricasJogoCrianca = obterTodasMetricasValidasCrianca(uuid, somenteCondicoesAdequadas);
+    public ResultadosTauUDTO execute(UUID criancaUuid, boolean somenteCondicoesAdequadas) {
+        var metricasJogoCrianca = obterTodasMetricasValidasCrianca(criancaUuid, somenteCondicoesAdequadas);
+
+        double tauAcerto;
+        double tauErro;
+        double tauTempo;
 
         var taxasAcertos = obterListaDeAcertoPelasMetricas(metricasJogoCrianca);
         var taxasErros = obterListaDeErrosPelasMetricas(metricasJogoCrianca);
         var temposSessoes = obterListaDeTempoPelasMetricas(metricasJogoCrianca);
 
-        var tauAcerto = calcularTauUPelaListaCompleta(taxasAcertos, true);
-        var tauErro = calcularTauUPelaListaCompleta(taxasErros, false);
-        var tauTempo = calcularTauUPelaListaCompleta(temposSessoes, false);
+        if(metricasJogoCrianca.size() <= 20) {
+            tauAcerto = calcularTauUPelaListaDividida(taxasAcertos, true);
+            tauErro = calcularTauUPelaListaDividida(taxasErros, false);
+            tauTempo = calcularTauUPelaListaDividida(temposSessoes, false);
+        }
+        else {
+            tauAcerto = calcularTauUPelaListaCompleta(taxasAcertos, true);
+            tauErro = calcularTauUPelaListaCompleta(taxasErros, false);
+            tauTempo = calcularTauUPelaListaCompleta(temposSessoes, false);
+        }
 
-        return ResultadosTauUDTO.builder().TauUAcerto(tauAcerto).TauUErro(tauErro).TauUTempo(tauTempo).build();
+        return ResultadosTauUDTO.builder().tauUAcerto(tauAcerto).tauUErro(tauErro).tauUTempo(tauTempo).build();
     }
 
     public List<MetricasJogoModel> obterTodasMetricasValidasCrianca(UUID uuid, boolean somenteCondicoesAdequadas){
         return somenteCondicoesAdequadas ?
-                metricasJogoRepository.searchAllByCriancaUUIDAndCondicoesAdequadasOrderById(uuid, CondicoesAdequadasEnum.COND_ADEQUADAS)
-                : metricasJogoRepository.searchAllByCriancaUUIDOrderById(uuid);
+                metricasJogoRepository.searchAllByCriancaUUIDAndCondicoesAdequadasAndJogoIDAndNumeroDaFaseOrderById(uuid, CondicoesAdequadasEnum.COND_ADEQUADAS, 1L,2 )
+                : metricasJogoRepository.searchAllByCriancaUUIDAndJogoIDAndNumeroDaFaseOrderById(uuid, 12L, 2);
     }
 
-    private double calcularTauUPelaListaCompleta(List<Double> listaCompleta, boolean maiorMelhor){
-        if (listaCompleta.size() % 2 != 0) {
-            listaCompleta = listaCompleta.subList(1, listaCompleta.size());
-        }
-
+    private double calcularTauUPelaListaDividida(List<Double> listaCompleta, boolean maiorMelhor){
         var meio = listaCompleta.size() / 2;
         var linhaDeBase = listaCompleta.subList(0, meio);
         var linhaDeIntervencao = listaCompleta.subList(meio, listaCompleta.size());
+
+        try {
+            return CalculadoraTauU.calcularTauU(linhaDeBase, linhaDeIntervencao, maiorMelhor);
+        }
+        catch (Exception ex){
+            return 0;
+        }
+    }
+
+    private double calcularTauUPelaListaCompleta(List<Double> listaCompleta, boolean maiorMelhor){
+        var linhaDeBase = listaCompleta.subList(0, 10);
+        var linhaDeIntervencao = listaCompleta.subList(10, listaCompleta.size());
 
         try {
             return CalculadoraTauU.calcularTauU(linhaDeBase, linhaDeIntervencao, maiorMelhor);

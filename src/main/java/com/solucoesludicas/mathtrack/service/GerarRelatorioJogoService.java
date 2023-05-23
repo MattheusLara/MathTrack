@@ -4,6 +4,6 @@ import com.solucoesludicas.mathtrack.dto.ResultadosTauUDTO;
 
 import java.util.UUID;
 
-public interface CalcularTauUService {
-    ResultadosTauUDTO execute(final UUID criancaUuid, final boolean somenteCondicoesAdequadas);
+public interface GerarRelatorioJogoService {
+    String execute(final UUID criancaUuid, Long idJogo);
 }

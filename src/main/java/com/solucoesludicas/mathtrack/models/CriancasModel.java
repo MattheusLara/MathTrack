@@ -1,12 +1,13 @@
 package com.solucoesludicas.mathtrack.models;
 
-import com.solucoesludicas.mathtrack.enums.DiagnosticoEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 @Getter
 @Setter
@@ -22,9 +23,10 @@ public class CriancasModel implements Serializable {
     private String email;
     @Column(nullable = false)
     private String nome;
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private DiagnosticoEnum diagnostico;
+
+    @OneToMany(mappedBy = "criancaUUID", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DiagnosticoCriancaModel> diagnosticos = new ArrayList<>();
+
     @Column(nullable = false)
     private LocalDateTime dataDeNascimento;
     @Column
