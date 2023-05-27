@@ -16,23 +16,33 @@ public class CuidadorModel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "uuid")
     private UUID uuid;
-    @Column(nullable = false)
+
+    @Column(name = "crianca_uuid", nullable = false)
     private String criancaUUID;
-    @Column(unique = true, nullable = false, length = 512)
+
+    @Column(name = "email", unique = true, nullable = false, length = 512)
     private String email;
-    @Column(length = 20, nullable = false)
+
+    @Column(name = "telefone", length = 20, nullable = false)
     private String telefone;
-    @Column(nullable = false)
+
+    @Column(name = "nome", nullable = false, length = 100)
     private String nome;
-    @Column
+
+    @Column(name = "endereco_rua")
     private String enderecoRua;
-    @Column
+
+    @Column(name = "endereco_bairro", length = 100)
     private String enderecoBairro;
-    @Column
+
+    @Column(name = "endereco_cidade", length = 100)
     private String enderecoCidade;
-    @Column
+
+    @Column(name = "endereco_numero", length = 20)
     private String enderecoNumero;
-    @Column
+
+    @Column(name = "endereco_complemento")
     private String enderecoComplemento;
 }

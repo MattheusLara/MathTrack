@@ -18,35 +18,48 @@ public class CriancasModel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "uuid")
     private UUID uuid;
-    @Column(unique = true, length = 512)
+
+    @Column(name = "email", unique = true, nullable = false, length = 512)
     private String email;
-    @Column(nullable = false)
+
+    @Column(name = "nome", nullable = false, length = 100)
     private String nome;
 
     @OneToMany(mappedBy = "criancaUUID", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DiagnosticoCriancaModel> diagnosticos = new ArrayList<>();
 
-    @Column(nullable = false)
+    @Column(name = "data_de_nascimento", nullable = false)
     private LocalDateTime dataDeNascimento;
-    @Column
+
+    @Column(name = "endereco_rua")
     private String enderecoRua;
-    @Column
+
+    @Column(name = "endereco_bairro", length = 100)
     private String enderecoBairro;
-    @Column
+
+    @Column(name = "endereco_cidade", length = 100)
     private String enderecoCidade;
-    @Column
+
+    @Column(name = "endereco_numero", length = 20)
     private String enderecoNumero;
-    @Column
+
+    @Column(name = "endereco_complemento")
     private String enderecoComplemento;
-    @Column
+
+    @Column(name = "cpf")
     private String cpf;
-    @Column(length = 20)
+
+    @Column(name = "telefone", length = 20)
     private String telefone;
-    @Column(length = 20)
+
+    @Column(name = "telefone_responsavel", length = 20)
     private String telefoneResponsavel;
-    @Column
-    private String especialistaUUID; //Pode nao ter?
-    @Column
+
+    @Column(name = "especialista_uuid")
+    private String especialistaUUID;
+
+    @Column(name = "cuidador_uuid")
     private String cuidadorUUID;
 }

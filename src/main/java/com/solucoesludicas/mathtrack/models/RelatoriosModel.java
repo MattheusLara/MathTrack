@@ -1,5 +1,6 @@
 package com.solucoesludicas.mathtrack.models;
 
+import com.solucoesludicas.mathtrack.enums.HabilidadeEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,14 +18,23 @@ public class RelatoriosModel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
-    @Column(nullable = false)
+
+    @Column(name = "crianca_uuid", nullable = false)
     private UUID criancaUUID;
-    @Column(nullable = false)
+
+    @Column(name = "especialista_uuid", nullable = false)
     private UUID especialistaUUID;
-    @Column(nullable = false)
+
+    @Column(name = "jogo_id", nullable = false)
     private long jogoID;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "habilidade_trabalhada", nullable = false)
+    private HabilidadeEnum habilidadeTrabalhada;
+
     @Lob
-    @Column(nullable = false, columnDefinition = "bytea")
+    @Column(name = "conteudo_do_relatorio", nullable = false, columnDefinition = "bytea")
     private Blob conteudoDoRelatorio;
 }

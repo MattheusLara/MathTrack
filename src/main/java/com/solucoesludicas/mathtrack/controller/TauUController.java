@@ -1,6 +1,7 @@
 package com.solucoesludicas.mathtrack.controller;
 
 import com.solucoesludicas.mathtrack.dto.ResultadosTauUDTO;
+import com.solucoesludicas.mathtrack.enums.HabilidadeEnum;
 import com.solucoesludicas.mathtrack.service.CalcularTauUService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class TauUController {
     private final CalcularTauUService calcularTauUService;
 
     @GetMapping("/obter-tauU")
-    public ResponseEntity<ResultadosTauUDTO> obeterTauU(@RequestHeader UUID criancaUuid, @RequestHeader boolean somenteCondicoesAdequadas){
-        return ResponseEntity.ok(calcularTauUService.execute(criancaUuid, somenteCondicoesAdequadas));
+    public ResponseEntity<ResultadosTauUDTO> obeterTauU(@RequestHeader UUID criancaUuid, @RequestHeader boolean somenteCondicoesAdequadas, @RequestHeader HabilidadeEnum habilidadeTrabalhada, @RequestHeader int dificuldade){
+        return ResponseEntity.ok(calcularTauUService.execute(criancaUuid, somenteCondicoesAdequadas, habilidadeTrabalhada, dificuldade));
     }
 }

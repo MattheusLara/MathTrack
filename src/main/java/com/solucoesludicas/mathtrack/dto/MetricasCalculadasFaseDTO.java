@@ -1,6 +1,8 @@
 package com.solucoesludicas.mathtrack.dto;
 
 import com.solucoesludicas.mathtrack.enums.ClassificacaoTauUEnum;
+import com.solucoesludicas.mathtrack.enums.HabilidadeEnum;
+import com.solucoesludicas.mathtrack.enums.PlataformaEnum;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,9 +15,7 @@ import java.util.UUID;
 @Builder
 public class MetricasCalculadasFaseDTO {
     private UUID criancaUUID;
-    private long jogoID;
-    private int numeroDaFase;
-    private int dificuldadeDaFase;
+    private int dificuldade;
     private double mediaAcertosCondAdequadas;
     private double mediaErrosCondAdequadas;
     private double mediaTempoCondAdequadas;
@@ -30,5 +30,7 @@ public class MetricasCalculadasFaseDTO {
     private ClassificacaoTauUEnum classificacaoTauUErrosCondAdequadas;
     private ClassificacaoTauUEnum classificacaoTauUAcertosCondNaoAdequadas;
     private ClassificacaoTauUEnum classificacaoTauUErrosCondNaoAdequadas;
+    private HabilidadeEnum habilidadeTrabalhada;
+    private PlataformaEnum plataforma;
     private LocalDateTime dataCalculoMetricas;
 }

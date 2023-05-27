@@ -1,6 +1,8 @@
 package com.solucoesludicas.mathtrack.dto;
 
 import com.solucoesludicas.mathtrack.enums.CondicoesAdequadasEnum;
+import com.solucoesludicas.mathtrack.enums.HabilidadeEnum;
+import com.solucoesludicas.mathtrack.enums.PlataformaEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,8 +16,10 @@ public class MetricasJogoDTO {
     private long jogoID;
     private int numeroDaFase;
     private int dificuldadeDaFase;
-    private int taxaDeAcertos;
-    private int taxaDeErros;
+    private int numeroDeAcertos;
+    private int numeroDeErros;
     private int tempoSessao;
+    private HabilidadeEnum habilidadeTrabalhada;
+    private PlataformaEnum plataforma;
     private CondicoesAdequadasEnum condicoesAdequadas;
 }

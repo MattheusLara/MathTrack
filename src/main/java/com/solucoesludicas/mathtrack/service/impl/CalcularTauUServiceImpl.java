@@ -2,6 +2,7 @@ package com.solucoesludicas.mathtrack.service.impl;
 
 import com.solucoesludicas.mathtrack.dto.ResultadosTauUDTO;
 import com.solucoesludicas.mathtrack.enums.CondicoesAdequadasEnum;
+import com.solucoesludicas.mathtrack.enums.HabilidadeEnum;
 import com.solucoesludicas.mathtrack.models.MetricasJogoModel;
 import com.solucoesludicas.mathtrack.repository.MetricasJogoRepository;
 import com.solucoesludicas.mathtrack.service.CalcularTauUService;
@@ -21,8 +22,8 @@ public class CalcularTauUServiceImpl implements CalcularTauUService {
 
     @Override
     @Transactional
-    public ResultadosTauUDTO execute(UUID criancaUuid, boolean somenteCondicoesAdequadas) {
-        var metricasJogoCrianca = obterTodasMetricasValidasCrianca(criancaUuid, somenteCondicoesAdequadas);
+    public ResultadosTauUDTO execute(UUID criancaUuid, boolean somenteCondicoesAdequadas, HabilidadeEnum habilidadeTrabalhada, int dificuldade) {
+        var metricasJogoCrianca = obterTodasMetricasValidasCriancaPorHabilidadEDificuldade(criancaUuid, somenteCondicoesAdequadas, habilidadeTrabalhada, dificuldade);
 
         double tauAcerto;
         double tauErro;
@@ -46,10 +47,10 @@ public class CalcularTauUServiceImpl implements CalcularTauUService {
         return ResultadosTauUDTO.builder().tauUAcerto(tauAcerto).tauUErro(tauErro).tauUTempo(tauTempo).build();
     }
 
-    public List<MetricasJogoModel> obterTodasMetricasValidasCrianca(UUID uuid, boolean somenteCondicoesAdequadas){
+    private List<MetricasJogoModel> obterTodasMetricasValidasCriancaPorHabilidadEDificuldade(UUID uuid, boolean somenteCondicoesAdequadas, HabilidadeEnum habilidadeTrabalhada, Integer dificuldade){
         return somenteCondicoesAdequadas ?
-                metricasJogoRepository.searchAllByCriancaUUIDAndCondicoesAdequadasAndJogoIDAndNumeroDaFaseOrderById(uuid, CondicoesAdequadasEnum.COND_ADEQUADAS, 1L,2 )
-                : metricasJogoRepository.searchAllByCriancaUUIDAndJogoIDAndNumeroDaFaseOrderById(uuid, 12L, 2);
+                metricasJogoRepository.searchAllByCriancaUUIDAndCondicoesAdequadasAndHabilidadeTrabalhadaAndDificuldadeDaFaseOrderById(uuid, CondicoesAdequadasEnum.COND_ADEQUADAS, habilidadeTrabalhada, dificuldade)
+                : metricasJogoRepository.searchAllByCriancaUUIDAndHabilidadeTrabalhadaAndDificuldadeDaFaseOrderById(uuid, habilidadeTrabalhada, dificuldade);
     }
 
     private double calcularTauUPelaListaDividida(List<Double> listaCompleta, boolean maiorMelhor){

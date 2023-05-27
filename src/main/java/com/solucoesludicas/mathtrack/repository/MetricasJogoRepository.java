@@ -1,6 +1,7 @@
 package com.solucoesludicas.mathtrack.repository;
 
 import com.solucoesludicas.mathtrack.enums.CondicoesAdequadasEnum;
+import com.solucoesludicas.mathtrack.enums.HabilidadeEnum;
 import com.solucoesludicas.mathtrack.models.MetricasJogoModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,19 +13,21 @@ import java.util.UUID;
 
 @Repository
 public interface MetricasJogoRepository extends JpaRepository<MetricasJogoModel, Long>{
-        List<MetricasJogoModel> searchAllByCriancaUUIDAndJogoIDAndNumeroDaFaseOrderById(
+        List<MetricasJogoModel> searchAllByCriancaUUIDAndHabilidadeTrabalhadaAndDificuldadeDaFaseOrderById(
                 UUID uuid,
-                Long jogoId,
-                int numeroDaFase);
+                HabilidadeEnum habilidadetrabalhada,
+                Integer dificuldade);
 
-        @Query("SELECT DISTINCT m.numeroDaFase FROM MetricasJogoModel m WHERE m.jogoID = :jogoId AND m.criancaUUID = :criancaUUID")
-        List<Integer> findDistinctNumeroDaFaseByJogoIDAndCriancaUUID(@Param("jogoId") Long jogoId, @Param("criancaUUID") UUID criancaUUID);
+        @Query("SELECT DISTINCT m.dificuldadeDaFase FROM MetricasJogoModel m WHERE m.criancaUUID = :criancaUUID AND m.habilidadeTrabalhada = :habilidadeTrabalhada")
+        List<Integer> findDistinctDificuldadeDeFasesByCriancaUUIDAndHabilidadeTrabalhada(@Param("criancaUUID") UUID criancaUUID, @Param("habilidadeTrabalhada") HabilidadeEnum habilidadeTrabalhada);
 
+        @Query("SELECT DISTINCT m.habilidadeTrabalhada FROM MetricasJogoModel m WHERE m.criancaUUID = :criancaUUID")
+        List<HabilidadeEnum> findDistinctHabilidadeTrabalhadaByCriancaUUID(@Param("criancaUUID") UUID criancaUUID);
 
-        List<MetricasJogoModel> searchAllByCriancaUUIDAndCondicoesAdequadasAndJogoIDAndNumeroDaFaseOrderById(
+        List<MetricasJogoModel> searchAllByCriancaUUIDAndCondicoesAdequadasAndHabilidadeTrabalhadaAndDificuldadeDaFaseOrderById(
                 UUID uuid,
                 CondicoesAdequadasEnum condicoesAdequadas,
-                Long jogoId,
-                int numeroDaFase
+                HabilidadeEnum habilidadetrabalhada,
+                Integer dificuldade
         );
 }
