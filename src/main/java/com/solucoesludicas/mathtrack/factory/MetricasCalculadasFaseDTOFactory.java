@@ -1,7 +1,8 @@
 package com.solucoesludicas.mathtrack.factory;
 
 import com.solucoesludicas.mathtrack.dto.MetricasCalculadasFaseDTO;
-import com.solucoesludicas.mathtrack.dto.ResultadosRelatorioDTO;
+import com.solucoesludicas.mathtrack.dto.ResultadosMetricasCalculadasDTO;
+import com.solucoesludicas.mathtrack.enums.PlataformaEnum;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -10,23 +11,24 @@ import java.time.ZoneId;
 @Component
 public class MetricasCalculadasFaseDTOFactory {
 
-    public MetricasCalculadasFaseDTO montarMetricasCalculadasDTO(ResultadosRelatorioDTO resultadosRelatorioCondAdequadasDTO, ResultadosRelatorioDTO resultadosRelatorioCondNaoAdequadasDTO) throws Exception {
+    public MetricasCalculadasFaseDTO montarMetricasCalculadasDTO(ResultadosMetricasCalculadasDTO resultadosRelatorioCondAdequadasDTO, ResultadosMetricasCalculadasDTO resultadosRelatorioCondNaoAdequadasDTO, PlataformaEnum plataforma) {
         if(resultadosRelatorioCondAdequadasDTO != null && resultadosRelatorioCondNaoAdequadasDTO != null){
-            return montarMetricasCalculadasCompletas(resultadosRelatorioCondAdequadasDTO, resultadosRelatorioCondNaoAdequadasDTO);
+            return montarMetricasCalculadasCompletas(resultadosRelatorioCondAdequadasDTO, resultadosRelatorioCondNaoAdequadasDTO, plataforma);
         } else if (resultadosRelatorioCondNaoAdequadasDTO != null) {
-            return montarMetricasCalculadasSemAdequadas(resultadosRelatorioCondNaoAdequadasDTO);
+            return montarMetricasCalculadasSemAdequadas(resultadosRelatorioCondNaoAdequadasDTO, plataforma);
         }
         else{
-            throw new Exception("Erro ao montar MetricasCalculadasDTO");
+            return null;
         }
     }
 
-    public MetricasCalculadasFaseDTO montarMetricasCalculadasCompletas(ResultadosRelatorioDTO condAdequadas, ResultadosRelatorioDTO condNaoAdequadas)
+    public MetricasCalculadasFaseDTO montarMetricasCalculadasCompletas(ResultadosMetricasCalculadasDTO condAdequadas, ResultadosMetricasCalculadasDTO condNaoAdequadas, PlataformaEnum plataforma)
     {
         return MetricasCalculadasFaseDTO.builder()
                 .criancaUUID(condAdequadas.getCriancaUUID())
                 .dificuldade(condAdequadas.getDificuldade())
                 .habilidadeTrabalhada(condAdequadas.getHabilidadeTrabalhada())
+                .plataforma(plataforma)
                 .mediaAcertosCondAdequadas(condAdequadas.getMediaDeAcerto())
                 .mediaErrosCondAdequadas(condAdequadas.getMediaDeErros())
                 .mediaTempoCondAdequadas(condAdequadas.getMediaDeTempo())
@@ -45,12 +47,13 @@ public class MetricasCalculadasFaseDTOFactory {
                 .build();
     }
 
-    public MetricasCalculadasFaseDTO montarMetricasCalculadasSemAdequadas(ResultadosRelatorioDTO condNaoAdequadas)
+    public MetricasCalculadasFaseDTO montarMetricasCalculadasSemAdequadas(ResultadosMetricasCalculadasDTO condNaoAdequadas, PlataformaEnum plataforma)
     {
         return MetricasCalculadasFaseDTO.builder()
                 .criancaUUID(condNaoAdequadas.getCriancaUUID())
                 .dificuldade(condNaoAdequadas.getDificuldade())
                 .habilidadeTrabalhada(condNaoAdequadas.getHabilidadeTrabalhada())
+                .plataforma(plataforma)
                 .mediaAcertosCondNaoAdequadas(condNaoAdequadas.getMediaDeAcerto())
                 .mediaErrosCondNaoAdequadas(condNaoAdequadas.getMediaDeErros())
                 .mediaTempoCondNaoAdequadas(condNaoAdequadas.getMediaDeTempo())

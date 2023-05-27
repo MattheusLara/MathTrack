@@ -60,6 +60,19 @@
 			<artifactId>commons-math3</artifactId>
 			<version>3.6.1</version>
 		</dependency>
+		<!-- SLF4J -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.32</version>
+		</dependency>
+
+		<!-- Logback -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.2.9</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -74,9 +87,15 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+					<arguments>
+						<argument>--spring.config.additional-location=${project.basedir}/src/main/resources/logback.xml</argument>
+					</arguments>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
+
+
+
 
 </project>

@@ -3,6 +3,7 @@ package com.solucoesludicas.mathtrack.service.impl;
 import com.solucoesludicas.mathtrack.dto.ResultadosTauUDTO;
 import com.solucoesludicas.mathtrack.enums.CondicoesAdequadasEnum;
 import com.solucoesludicas.mathtrack.enums.HabilidadeEnum;
+import com.solucoesludicas.mathtrack.enums.PlataformaEnum;
 import com.solucoesludicas.mathtrack.models.MetricasJogoModel;
 import com.solucoesludicas.mathtrack.repository.MetricasJogoRepository;
 import com.solucoesludicas.mathtrack.service.CalcularTauUService;
@@ -21,9 +22,8 @@ public class CalcularTauUServiceImpl implements CalcularTauUService {
     private final MetricasJogoRepository metricasJogoRepository;
 
     @Override
-    @Transactional
-    public ResultadosTauUDTO execute(UUID criancaUuid, boolean somenteCondicoesAdequadas, HabilidadeEnum habilidadeTrabalhada, int dificuldade) {
-        var metricasJogoCrianca = obterTodasMetricasValidasCriancaPorHabilidadEDificuldade(criancaUuid, somenteCondicoesAdequadas, habilidadeTrabalhada, dificuldade);
+    public ResultadosTauUDTO execute(UUID criancaUuid, boolean somenteCondicoesAdequadas, HabilidadeEnum habilidadeTrabalhada, int dificuldade, PlataformaEnum plataforma) {
+        var metricasJogoCrianca = obterTodasMetricasValidasCriancaPorHabilidadEDificuldadeEPlataforma(criancaUuid, somenteCondicoesAdequadas, habilidadeTrabalhada, dificuldade, plataforma);
 
         double tauAcerto;
         double tauErro;
@@ -47,10 +47,10 @@ public class CalcularTauUServiceImpl implements CalcularTauUService {
         return ResultadosTauUDTO.builder().tauUAcerto(tauAcerto).tauUErro(tauErro).tauUTempo(tauTempo).build();
     }
 
-    private List<MetricasJogoModel> obterTodasMetricasValidasCriancaPorHabilidadEDificuldade(UUID uuid, boolean somenteCondicoesAdequadas, HabilidadeEnum habilidadeTrabalhada, Integer dificuldade){
+    private List<MetricasJogoModel> obterTodasMetricasValidasCriancaPorHabilidadEDificuldadeEPlataforma(UUID uuid, boolean somenteCondicoesAdequadas, HabilidadeEnum habilidadeTrabalhada, Integer dificuldade, PlataformaEnum plataforma){
         return somenteCondicoesAdequadas ?
-                metricasJogoRepository.searchAllByCriancaUUIDAndCondicoesAdequadasAndHabilidadeTrabalhadaAndDificuldadeDaFaseOrderById(uuid, CondicoesAdequadasEnum.COND_ADEQUADAS, habilidadeTrabalhada, dificuldade)
-                : metricasJogoRepository.searchAllByCriancaUUIDAndHabilidadeTrabalhadaAndDificuldadeDaFaseOrderById(uuid, habilidadeTrabalhada, dificuldade);
+                metricasJogoRepository.searchAllByCriancaUUIDAndCondicoesAdequadasAndHabilidadeTrabalhadaAndPlataformaAndDificuldadeDaFaseOrderById(uuid, CondicoesAdequadasEnum.COND_ADEQUADAS, habilidadeTrabalhada, plataforma, dificuldade)
+                : metricasJogoRepository.searchAllByCriancaUUIDAndHabilidadeTrabalhadaAndPlataformaAndDificuldadeDaFaseOrderById(uuid, habilidadeTrabalhada, plataforma, dificuldade);
     }
 
     private double calcularTauUPelaListaDividida(List<Double> listaCompleta, boolean maiorMelhor){

@@ -11,7 +11,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
-public class ResultadosRelatorioDTO {
+public class ResultadosMetricasCalculadasDTO {
     private ClassificacaoTauUEnum classificacaoTauUAcertos;
     private ClassificacaoTauUEnum classificacaoTauUErros;
     private HabilidadeEnum habilidadeTrabalhada;

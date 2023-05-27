@@ -56,7 +56,7 @@ public class CalculadoraTauU {
                 }
             }
 
-            return tauU;
+            return Math.min(Math.max(tauU, -1.0), 1.0);
         } catch (Exception ex) {
             throw new Exception("Erro ao calcular Tau-U");
         }
