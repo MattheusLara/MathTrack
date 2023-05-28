@@ -91,7 +91,7 @@ public class LinhaDeBaseEIntervencaoTauU {
            return (concordante - discordante) / (double) (concordante + discordante);
         }
         else{
-            return 1;
+            return 0;
         }
     }
 }
