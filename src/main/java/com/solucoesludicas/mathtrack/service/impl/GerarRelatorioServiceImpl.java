@@ -1,5 +1,6 @@
 package com.solucoesludicas.mathtrack.service.impl;
 
+import com.solucoesludicas.mathtrack.dto.LinhaDeBaseEIntervencaoObject;
 import com.solucoesludicas.mathtrack.dto.MetricasCalculadasFaseDTO;
 import com.solucoesludicas.mathtrack.dto.ResultadosMetricasCalculadasDTO;
 import com.solucoesludicas.mathtrack.dto.ResultadosTauUDTO;
@@ -14,6 +15,7 @@ import com.solucoesludicas.mathtrack.repository.MetricasJogoRepository;
 import com.solucoesludicas.mathtrack.service.GerarRelatorioService;
 import com.solucoesludicas.mathtrack.service.SalvarMetricasCalculadasFaseService;
 import com.solucoesludicas.mathtrack.utils.CalculadoraTauU;
+import com.solucoesludicas.mathtrack.utils.LinhaDeBaseEIntervencaoTauU;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.springframework.stereotype.Service;
@@ -78,22 +80,22 @@ public class GerarRelatorioServiceImpl implements GerarRelatorioService {
         }
     }
 
-    private ResultadosMetricasCalculadasDTO calcularMetricas(UUID criancaUuid, boolean somenteCondicoesAdequadas, HabilidadeEnum habilidadeTrabalhada, Integer dificuldade, PlataformaEnum plataforma) {
+    private ResultadosMetricasCalculadasDTO calcularMetricas(UUID criancaUuid, boolean somenteCondicoesAdequadas, HabilidadeEnum habilidadeTrabalhada, Integer dificuldade, PlataformaEnum plataforma) throws Exception {
         var metricasJogoCrianca = obterTodasMetricasValidasCriancaPorHabilidadEDificuldadeEPlataforma(criancaUuid, somenteCondicoesAdequadas, habilidadeTrabalhada, dificuldade, plataforma);
 
         if(metricasJogoCrianca.size() >= 2){
-            var numeroAcertos = obterListaDeAcertoPelasMetricas(metricasJogoCrianca);
-            var numeroErros = obterListaDeErrosPelasMetricas(metricasJogoCrianca);
-            var temposSessoes = obterListaDeTempoPelasMetricas(metricasJogoCrianca);
+            var metricasAcertos = obterListaDeAcertoPelasMetricas(metricasJogoCrianca);
+            var metricasErros = obterListaDeErrosPelasMetricas(metricasJogoCrianca);
+            var metricasTempoSessoes = obterListaDeTempoPelasMetricas(metricasJogoCrianca);
 
-            var tauU = calcularTauU(numeroAcertos, numeroErros, metricasJogoCrianca.size());
+            var tauU = calcularTauU(metricasAcertos, metricasErros);
             var tauUAcerto = tauU.getTauUAcerto();
             var tauUErro = tauU.getTauUErro();
 
 
-            var mediaNumeroDeAcertos = calcularMedia(numeroAcertos);
-            var mediaNumeroDeErros = calcularMedia(numeroErros);
-            var mediaTempoSessoes = calcularMedia(temposSessoes);
+            var mediaNumeroDeAcertos = calcularMedia(metricasAcertos);
+            var mediaNumeroDeErros = calcularMedia(metricasErros);
+            var mediaTempoSessoes = calcularMedia(metricasTempoSessoes);
 
             return ResultadosMetricasCalculadasDTO.builder()
                     .criancaUUID(criancaUuid)
@@ -129,47 +131,16 @@ public class GerarRelatorioServiceImpl implements GerarRelatorioService {
         return estatisticas.getMean();
     }
 
-    private ResultadosTauUDTO calcularTauU(List<Double> numeroAcertos, List<Double> numeroErros, int quantidadeDeMetricas) {
-        double tauAcerto;
-        double tauErro;
+    private ResultadosTauUDTO calcularTauU(List<Double> metricasAcertos, List<Double> metricasErros) throws Exception {
+        var baseEIntervencaoAcertos = LinhaDeBaseEIntervencaoTauU.obterLinhaDeBaseEIntervencao(metricasAcertos);
+        var baseEIntervencaoErros = LinhaDeBaseEIntervencaoTauU.obterLinhaDeBaseEIntervencao(metricasErros);
 
-        if(quantidadeDeMetricas <= 20) {
-            tauAcerto = calcularTauUPelaListaDividida(numeroAcertos, true);
-            tauErro = calcularTauUPelaListaDividida(numeroErros, false);
-        }
-        else {
-            tauAcerto = calcularTauUPelaListaCompleta(numeroAcertos, true);
-            tauErro = calcularTauUPelaListaCompleta(numeroErros, false);
-        }
+        var tauAcerto = CalculadoraTauU.calcularTauU(baseEIntervencaoAcertos.getLinhaDeBase(), baseEIntervencaoAcertos.getIntervencao(), true);
+        var tauErro = CalculadoraTauU.calcularTauU(baseEIntervencaoErros.getLinhaDeBase(), baseEIntervencaoErros.getIntervencao(), false);
 
         return ResultadosTauUDTO.builder().tauUAcerto(tauAcerto).tauUErro(tauErro).build();
     }
-
-    private double calcularTauUPelaListaDividida(List<Double> listaCompleta, boolean maiorMelhor){
-        var meio = listaCompleta.size() / 2;
-        var linhaDeBase = listaCompleta.subList(0, meio);
-        var linhaDeIntervencao = listaCompleta.subList(meio, listaCompleta.size());
-
-        try {
-            return CalculadoraTauU.calcularTauU(linhaDeBase, linhaDeIntervencao, maiorMelhor);
-        }
-        catch (Exception ex){
-            return 0;
-        }
-    }
-
-    private double calcularTauUPelaListaCompleta(List<Double> listaCompleta, boolean maiorMelhor){
-        var linhaDeBase = listaCompleta.subList(0, 10);
-        var linhaDeIntervencao = listaCompleta.subList(10, listaCompleta.size());
-
-        try {
-            return CalculadoraTauU.calcularTauU(linhaDeBase, linhaDeIntervencao, maiorMelhor);
-        }
-        catch (Exception ex){
-            return 0;
-        }
-    }
-
+    
     private List<Double> obterListaDeAcertoPelasMetricas(List<MetricasJogoModel> metricasJogoDTOList){
         return metricasJogoDTOList.stream()
                 .mapToDouble(MetricasJogoModel::getNumeroDeAcertos)
