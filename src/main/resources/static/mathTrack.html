@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>MathTrack</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-ruler-combined"></i> MathTrack</h1>
+        <p>Bem-vindo ao MathTrack, a plataforma definitiva para acompanhar o progresso do aprendizado de matemática das crianças.</p>
+        <label for="criancaUuid"><i class="fas fa-child"></i> Criança UUID:</label>
+        <input type="text" id="criancaUuid" name="criancaUuid" required placeholder="Insira a UUID da criança">
+        <label for="plataforma"><i class="fas fa-mobile-alt"></i> Plataforma:</label>
+        <select id="plataforma" name="plataforma" required>
+            <option value="">Selecione a plataforma</option>
+            <option value="MOBILE">Mobile</option>
+            <option value="VR">Realidade Virtual</option>
+        </select>
+        <p id="errorMessage" class="errorMessage"></p>
+        <button id="generateReport"><i class="fas fa-file-pdf"></i> Gerar relatório</button>
+    </div>
+    <div class="container reportResult" id="pdfResult">
+        <h2><i class="fas fa-chart-line"></i> Resultado do Relatório</h2>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

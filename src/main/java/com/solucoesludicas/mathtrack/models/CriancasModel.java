@@ -21,10 +21,10 @@ public class CriancasModel implements Serializable {
     @Column(name = "uuid")
     private UUID uuid;
 
-    @Column(name = "email", unique = true, nullable = false, length = 512)
+    @Column(name = "email", unique = true, length = 512)
     private String email;
 
-    @Column(name = "nome", nullable = false, length = 100)
+    @Column(name = "nome", unique = true, nullable = false, length = 100)
     private String nome;
 
     @OneToMany(mappedBy = "criancaUUID", cascade = CascadeType.ALL, orphanRemoval = true)

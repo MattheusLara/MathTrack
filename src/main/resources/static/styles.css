@@ -1,0 +1,185 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #71b280, #134E5E);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    flex-direction: column;
+    color: #FAFAFA;
+    position: relative;
+    overflow: auto;
+}
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url(imagens/fundo.jpeg) no-repeat center center / cover;
+    opacity: 0.1;
+    z-index: -1;
+}
+
+.container {
+    max-width: 800px;
+    width: 90%;
+    background-color: #FFF;
+    padding: 30px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.3);
+    border-left: 6px solid #134E5E;
+    animation: slideIn 0.5s ease-in-out;
+    overflow: hidden;
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+h1 {
+    text-align: center;
+    color: #134E5E;
+    font-size: 3em;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 2s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+p {
+    font-size: 1.1em;
+    text-align: justify;
+    color: #595959;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+label {
+    font-weight: bold;
+    color: #134E5E;
+    display: block;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin-bottom: 30px;
+    box-sizing: border-box;
+    font-size: 1.1em;
+    color: #444;
+    transition: border 0.3s ease-in-out;
+}
+
+input:focus, select:focus {
+    border: 1px solid #71b280;
+    outline: none;
+}
+
+button {
+    width: calc(100% - 30px);
+    padding: 15px;
+    margin: 15px;
+    background: linear-gradient(135deg, #134E5E, #71b280);
+    color: #FFF;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+    box-sizing: border-box;
+}
+
+button:hover {
+    transform: scale(1.1);
+}
+
+.reportResult {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 15px;
+    border-left: 6px solid #134E5E;
+    box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.3);
+    display: none;
+    margin-bottom: 30px;
+    animation: slideIn 0.5s ease-in-out;
+    max-height: 450px;
+    overflow-y: auto;
+}
+
+.reportResult h2 {
+    margin-bottom: 20px;
+    color: #134E5E;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 2s ease-in;
+}
+
+.reportResult a {
+    display: inline-block;
+    text-decoration: none;
+    background-color: #134E5E;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+    box-shadow: 0px 5px 10px -5px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+}
+
+.reportResult a:hover {
+    background-color: #103944;
+}
+
+.reportResult a i {
+    margin-left: 5px;
+    margin-right: 10px;
+}
+
+.errorMessage {
+    font-size: 1em; /* ajuste o tamanho da fonte para o mesmo que o resto do texto */
+    color: #f44336;
+    padding: 15px; /* ajuste o preenchimento para que o contêiner tenha o mesmo tamanho que o botão */
+    border-radius: 10px;
+    border: 2px solid #f44336;
+    background-color: rgba(255, 235, 238, 0.8);
+    margin-bottom: 20px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    display: none;
+    font-family: 'Roboto', sans-serif;
+    text-align: center; /* centralize o texto */
+    max-width: calc(100% - 30px); /* faça o contêiner ter o mesmo tamanho que o botão */
+}
+
+.reportResult::-webkit-scrollbar {
+    width: 8px;
+}
+
+.reportResult::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+}
+
+.reportResult::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 4px;
+}
+
+.reportResult::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
