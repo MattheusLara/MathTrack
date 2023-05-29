@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ClassificacaoTauUEnum {
-    MEVOLUCAO_EXPRESSIVA(0.8, 1.0, "Ótima evolução"),
+    EVOLUCAO_EXPRESSIVA(0.8, 1.0, "Ótima evolução"),
     EVOLUCAO_MODERADA(0.5, 0.8, "Moderada a substancial evolução"),
     EVOLUCAO_LEVE(0.3, 0.5, "Média ou boa evolução"),
     EVOLUCAO_MINIMA(0, 0.3, "Muito pouca ou nenhuma evolução"),

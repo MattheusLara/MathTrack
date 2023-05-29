@@ -4,6 +4,7 @@ import com.solucoesludicas.mathtrack.enums.HabilidadeEnum;
 import com.solucoesludicas.mathtrack.enums.PlataformaEnum;
 import com.solucoesludicas.mathtrack.repository.CriancasRepository;
 import com.solucoesludicas.mathtrack.service.GerarRelatorioService;
+import com.solucoesludicas.mathtrack.service.JasperService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -23,24 +24,31 @@ import java.util.UUID;
 public class GerarRelatorioController {
     private final CriancasRepository criancasRepository;
     private final GerarRelatorioService gerarRelatorioService;
+    private final JasperService jasperService;
 
     @CrossOrigin(origins = "*", maxAge = 3600)
     @PostMapping("/gerar-relatorio-jogo/geral")
     public ResponseEntity<byte[]> gerarRelatorioJogo(@RequestHeader UUID criancaUuid, @RequestHeader PlataformaEnum plataforma) throws Exception{
-        if(!criancasRepository.existsById(criancaUuid)){
+
+        if (!criancasRepository.existsById(criancaUuid)) {
             throw new Exception("Nao foi possivel escontrar a crianca com esse uuid");
         }
 
-        gerarRelatorioService.gerarRelatorioGeral(criancaUuid, plataforma);
+        var dataCalculoDeMetricas = gerarRelatorioService.gerarRelatorioGeral(criancaUuid, plataforma);
 
-        var pdfPath = "D:\\Projetos\\MathTrack\\src\\main\\resources\\relatorios\\Linux.pdf";
+        jasperService.addParams("criancaUUID", criancaUuid.toString());
+        jasperService.addParams("plataforma", plataforma);
+        jasperService.addParams("dataCricaoRelatorio", dataCalculoDeMetricas);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/pdf");
-        headers.add("Content-Disposition", "inline; filename=report.pdf");
+        headers.add("Content-Disposition", "inline; filename=RelatorioGeral.pdf");
 
-        Path path = Paths.get(pdfPath);
-        byte[] pdf = Files.readAllBytes(path);
+        byte[] pdf = jasperService.exportarPDF("RelatorioGeral");
+
+        if (pdf == null){
+            throw new Exception("Erro ao gerar o relatorio");
+        }
 
         return ResponseEntity
                 .ok()

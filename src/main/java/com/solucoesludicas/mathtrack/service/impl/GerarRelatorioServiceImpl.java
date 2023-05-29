@@ -1,6 +1,5 @@
 package com.solucoesludicas.mathtrack.service.impl;
 
-import com.solucoesludicas.mathtrack.dto.LinhaDeBaseEIntervencaoObject;
 import com.solucoesludicas.mathtrack.dto.MetricasCalculadasFaseDTO;
 import com.solucoesludicas.mathtrack.dto.ResultadosMetricasCalculadasDTO;
 import com.solucoesludicas.mathtrack.dto.ResultadosTauUDTO;
@@ -36,13 +35,13 @@ public class GerarRelatorioServiceImpl implements GerarRelatorioService {
     private final Logger logger;
 
     @Override
-    public String gerarRelatorioGeral(UUID criancaUuid, PlataformaEnum plataforma) throws Exception {
+    public LocalDateTime gerarRelatorioGeral(UUID criancaUuid, PlataformaEnum plataforma) throws Exception {
         var horarioInicioGeracaoDeMetricas = LocalDateTime.now(ZoneId.of("UTC"));
 
         calcularMetricasParaRelatorioGeral(criancaUuid, plataforma);
 
 
-        return String.format("Link do relatorio: %s", horarioInicioGeracaoDeMetricas);
+        return horarioInicioGeracaoDeMetricas;
     }
 
     @Override
