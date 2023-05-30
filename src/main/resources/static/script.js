@@ -2,8 +2,7 @@ document.getElementById('generateReport').addEventListener('click', function() {
     const criancaUuid = document.getElementById('criancaUuid').value;
     const plataforma = document.getElementById('plataforma').value;
     const errorMessageElement = document.getElementById('errorMessage');
-    
-    // Limpar qualquer mensagem de erro anterior
+
     errorMessageElement.style.display = 'none';
     errorMessageElement.textContent = '';
 

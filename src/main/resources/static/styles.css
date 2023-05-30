@@ -129,7 +129,6 @@ button:hover {
 }
 
 .reportResult a {
-    display: inline-block;
     text-decoration: none;
     background-color: #134E5E;
     color: white;

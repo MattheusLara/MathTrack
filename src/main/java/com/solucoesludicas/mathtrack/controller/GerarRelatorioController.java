@@ -37,8 +37,8 @@ public class GerarRelatorioController {
         var dataCalculoDeMetricas = gerarRelatorioService.gerarRelatorioGeral(criancaUuid, plataforma);
 
         jasperService.addParams("criancaUUID", criancaUuid.toString());
-        jasperService.addParams("plataforma", plataforma);
-        jasperService.addParams("dataCriacaoRelatorio", dataCalculoDeMetricas);
+        jasperService.addParams("plataforma", plataforma.toString());
+        jasperService.addParams("dataCriacaoRelatorio", dataCalculoDeMetricas.toString());
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/pdf");
