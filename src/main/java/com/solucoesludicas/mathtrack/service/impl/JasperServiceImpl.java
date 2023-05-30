@@ -32,7 +32,7 @@ public class JasperServiceImpl implements JasperService {
 
     public JasperServiceImpl() {
         this.params.put("diretorioImagem", JASPER_DIRETORIO);
-        this.params.put("SUB_REPORT_DIR", "classpath:jasper/DadosGerais.jasper");
+        this.params.put("SUB_REPORT_DIR", JASPER_DIRETORIO);
         this.params.put("REPORT_LOCALE", new Locale("pt","BR"));
     }
 

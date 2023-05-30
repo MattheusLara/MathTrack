@@ -37,14 +37,14 @@ public class GerarRelatorioController {
         var dataCalculoDeMetricas = gerarRelatorioService.gerarRelatorioGeral(criancaUuid, plataforma);
 
         jasperService.addParams("criancaUUID", criancaUuid.toString());
-        jasperService.addParams("plataforma", plataforma);
-        jasperService.addParams("dataCriacaoRelatorio", dataCalculoDeMetricas);
+        jasperService.addParams("plataforma", plataforma.toString());
+        jasperService.addParams("dataCriacaoRelatorio", dataCalculoDeMetricas.toString());
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/pdf");
         headers.add("Content-Disposition", "inline; filename=RelatorioGeral.pdf");
 
-        byte[] pdf = jasperService.exportarPDF("DadosGerais");
+        byte[] pdf = jasperService.exportarPDF("RelatorioGeral");
 
         if (pdf == null){
             throw new Exception("Erro ao gerar o relatorio");
