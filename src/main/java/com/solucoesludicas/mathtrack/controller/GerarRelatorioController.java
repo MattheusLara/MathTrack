@@ -44,7 +44,7 @@ public class GerarRelatorioController {
         headers.add("Content-Type", "application/pdf");
         headers.add("Content-Disposition", "inline; filename=RelatorioGeral.pdf");
 
-        byte[] pdf = jasperService.exportarPDF("RelatorioGeral");
+        byte[] pdf = jasperService.exportarPDF("DadosGerais");
 
         if (pdf == null){
             throw new Exception("Erro ao gerar o relatorio");
