@@ -28,11 +28,15 @@ public class GerarRelatorioController {
 
     @CrossOrigin(origins = "*", maxAge = 3600)
     @PostMapping("/gerar-relatorio-jogo/geral")
-    public ResponseEntity<byte[]> gerarRelatorioJogo(@RequestHeader UUID criancaUuid, @RequestHeader PlataformaEnum plataforma) throws Exception{
+    public ResponseEntity<byte[]> gerarRelatorioJogo(@RequestHeader String criancaCpf, @RequestHeader PlataformaEnum plataforma) throws Exception{
 
-        if (!criancasRepository.existsById(criancaUuid)) {
-            throw new Exception("Nao foi possivel escontrar a crianca com esse uuid");
+        var crianca = criancasRepository.findByCpf(criancaCpf);
+
+        if (crianca == null) {
+            throw new Exception("Nao foi possivel escontrar a crianca com esse CPF");
         }
+
+        var criancaUuid = crianca.getUuid();
 
         var dataCalculoDeMetricas = gerarRelatorioService.gerarRelatorioGeral(criancaUuid, plataforma);
 

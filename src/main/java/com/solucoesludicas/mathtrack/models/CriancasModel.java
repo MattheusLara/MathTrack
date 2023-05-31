@@ -27,6 +27,9 @@ public class CriancasModel implements Serializable {
     @Column(name = "nome", unique = true, nullable = false, length = 100)
     private String nome;
 
+    @Column(name = "cpf", unique = true, nullable = false)
+    private String cpf;
+
     @OneToMany(mappedBy = "criancaUUID", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DiagnosticoCriancaModel> diagnosticos = new ArrayList<>();
 
@@ -47,9 +50,6 @@ public class CriancasModel implements Serializable {
 
     @Column(name = "endereco_complemento")
     private String enderecoComplemento;
-
-    @Column(name = "cpf")
-    private String cpf;
 
     @Column(name = "telefone", length = 20)
     private String telefone;
