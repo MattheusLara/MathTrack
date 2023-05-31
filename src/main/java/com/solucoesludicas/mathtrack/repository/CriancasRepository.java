@@ -8,5 +8,5 @@ import java.util.UUID;
 
 @Repository
 public interface CriancasRepository extends JpaRepository<CriancasModel, UUID>{
-
+    CriancasModel findByCpf(String cpf);
 }

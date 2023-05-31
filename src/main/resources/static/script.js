@@ -1,13 +1,13 @@
 document.getElementById('generateReport').addEventListener('click', function() {
-    const criancaUuid = document.getElementById('criancaUuid').value;
+    const criancaCpf = document.getElementById('criancaCpf').value;
     const plataforma = document.getElementById('plataforma').value;
     const errorMessageElement = document.getElementById('errorMessage');
 
     errorMessageElement.style.display = 'none';
     errorMessageElement.textContent = '';
 
-    if (!criancaUuid || !plataforma) {
-        errorMessageElement.textContent = 'Por favor, preencha todos os campos. A UUID da criança deve ser o identificador único da criança. A plataforma deve ser mobile ou realidade virtual.';
+    if (!criancaCpf || !plataforma) {
+        errorMessageElement.textContent = 'Por favor, preencha todos os campos. O cpf da criança deve ser preenchido. A plataforma deve ser mobile ou realidade virtual.';
         errorMessageElement.style.display = 'block';
         return;
     }
@@ -15,7 +15,7 @@ document.getElementById('generateReport').addEventListener('click', function() {
     fetch('http://localhost:8080/gerar-relatorio-jogo/geral', {
         method: 'POST', 
         headers: {
-            'criancaUuid': criancaUuid,
+            'criancaCpf': criancaCpf,
             'plataforma': plataforma
         }
     })
@@ -30,7 +30,7 @@ document.getElementById('generateReport').addEventListener('click', function() {
                 const dateTimeString = now.toLocaleDateString() + " " + now.toLocaleTimeString();
 
                 const linkText = document.createElement('span');
-                linkText.textContent = `Relatório para a criança ${criancaUuid} na plataforma ${plataforma} gerado em ${dateTimeString}.`;
+                linkText.textContent = `Relatório para a criança de cpf ${criancaCpf} na plataforma ${plataforma} gerado em ${dateTimeString}.`;
 
                 const downloadIcon = document.createElement('i');
                 downloadIcon.classList.add('fas', 'fa-cloud-download-alt');
