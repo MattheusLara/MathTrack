@@ -39,22 +39,22 @@ public class CalculadoraTauU {
                 tauU = (concordante - discordante) / (double) (concordante + discordante);
             }
 
-            if(necessarioAjusteTendencia(linhaBase)){
-                if(maiorMelhor){
-                    calcularConcordantesEDiscodantesNaLinhaDeBaseMaiorMelhor(linhaBase);
-                }
-                else{
-                    calcularConcordantesEDiscodantesNaLinhaDeBaseMenorMelhor(linhaBase);
-                }
-
-                //Romovendo tendencia da linha sobre o calculo de Tau-U
-                if ((concordante + discordante) != 0 && (concordanteLinhaBase + discordanteLinhaBase) != 0) {
-                    //Realizando calculo de Tau-U para linha de base
-                    double tauUBase = (concordanteLinhaBase - discordanteLinhaBase) / (double) (concordanteLinhaBase + discordanteLinhaBase);
-                    //Subtrai o resultado bruto de Tau-U com o resultado de Tau-U da linha de base para remover a tendencia.
-                    tauU = (tauU - tauUBase);
-                }
-            }
+//            if(necessarioAjusteTendencia(linhaBase)){
+//                if(maiorMelhor){
+//                    calcularConcordantesEDiscodantesNaLinhaDeBaseMaiorMelhor(linhaBase);
+//                }
+//                else{
+//                    calcularConcordantesEDiscodantesNaLinhaDeBaseMenorMelhor(linhaBase);
+//                }
+//
+//                //Romovendo tendencia da linha sobre o calculo de Tau-U
+//                if ((concordante + discordante) != 0 && (concordanteLinhaBase + discordanteLinhaBase) != 0) {
+//                    //Realizando calculo de Tau-U para linha de base
+//                    double tauUBase = (concordanteLinhaBase - discordanteLinhaBase) / (double) (concordanteLinhaBase + discordanteLinhaBase);
+//                    //Subtrai o resultado bruto de Tau-U com o resultado de Tau-U da linha de base para remover a tendencia.
+//                    tauU = (tauU - tauUBase);
+//                }
+//            }
 
             return Math.min(Math.max(tauU, -1.0), 1.0);
         } catch (Exception ex) {

@@ -70,6 +70,11 @@ public class LinhaDeBaseEIntervencaoTauU {
                 .build();
     }
 
+    public static void main(String[] args){
+        var teste = calcularTauUBruto(List.of(10.0,20.0,30.0,40.0,50.0,60.0));
+
+        teste = 0 + teste;
+    }
     private double calcularTauUBruto(List<Double> linhaBase){
         var tamanhoDaLista = linhaBase.size();
 
