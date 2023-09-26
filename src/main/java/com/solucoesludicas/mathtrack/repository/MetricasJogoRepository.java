@@ -14,6 +14,9 @@ import java.util.UUID;
 
 @Repository
 public interface MetricasJogoRepository extends JpaRepository<MetricasJogoModel, Long>{
+
+        List<MetricasJogoModel> findAllByEspecialistaUUID(UUID uuid);
+
         List<MetricasJogoModel> searchAllByCriancaUUIDAndHabilidadeTrabalhadaAndPlataformaAndDificuldadeDaFaseOrderById(
                 UUID uuid,
                 HabilidadeEnum habilidadetrabalhada,

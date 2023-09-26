@@ -1,4 +1,4 @@
-package com.solucoesludicas.mathtrack.configuration;
+package com.solucoesludicas.mathtrack.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
