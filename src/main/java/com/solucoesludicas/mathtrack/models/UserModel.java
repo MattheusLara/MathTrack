@@ -6,7 +6,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
@@ -24,12 +23,15 @@ public class UserModel implements UserDetails {
     private Long id;
     @Column(unique = true, nullable = false)
     private String login;
+    @Column(unique = true, nullable = false)
+    private String email;
     @Column(nullable = false)
     private String password;
     private UserRole role;
 
-    public UserModel(String login, String password, UserRole role) {
+    public UserModel(String login, String email, String password, UserRole role) {
         this.login = login;
+        this.email = email;
         this.password = password;
         this.role = role;
     }

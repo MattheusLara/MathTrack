@@ -16,7 +16,7 @@ public class UserServiceImpl implements UserService {
 
     public UserModel registerUser(UserDto data){
         var encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
-        var user = new UserModel(data.login(), encryptedPassword, data.role());
+        var user = new UserModel(data.login(), data.email(), encryptedPassword, data.role());
         this.userRepository.save(user);
         return user;
     }

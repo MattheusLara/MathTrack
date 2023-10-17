@@ -44,9 +44,14 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity registrarUser(@RequestBody @Valid UserDto data){
-        if(this.userRepository.findByLogin(data.login()) != null){
+        if(!data.password().equals(data.repeatPassword())){
             return ResponseEntity.badRequest().build();
         }
+
+        if((this.userRepository.findByLogin(data.login()) != null) || this.userRepository.findByEmail(data.email()) != null){
+            return ResponseEntity.badRequest().build();
+        }
+
         this.userService.registerUser(data);
         return ResponseEntity.ok().build();
     }
