@@ -1,6 +1,7 @@
 package com.solucoesludicas.mathtrack.controller;
 
 import com.solucoesludicas.mathtrack.dto.MetricasJogoDTO;
+import com.solucoesludicas.mathtrack.models.MetricasCompletasModel;
 import com.solucoesludicas.mathtrack.models.MetricasJogoModel;
 import com.solucoesludicas.mathtrack.service.MetricaService;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.UUID;
 
 
 @RequiredArgsConstructor
@@ -30,8 +30,8 @@ public class MetricaController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/list/{uuid}")
-    public ResponseEntity<List<MetricasJogoModel>> getMetrica(@PathVariable String uuid){
-        return ResponseEntity.ok(metricaService.getAllMetricasByEspecialista(UUID.fromString(uuid)));
+    @GetMapping("/list/{role}/{id}")
+    public ResponseEntity<List<MetricasCompletasModel>> getMetrica(@PathVariable String role, @PathVariable String identifier){
+        return ResponseEntity.ok(metricaService.getAllMetricasByIdentifier(role, identifier));
     }
 }

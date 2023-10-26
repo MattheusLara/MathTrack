@@ -13,7 +13,7 @@ import java.util.UUID;
 public class DadosDaMetricaDTO {
     private long jogoID;
     private int numeroDaFase;
-    private int dificuldadeDaFase;
+    private int dificuldadeFase;
     private UUID criancaUUID;
     private UUID especialistaUUID;
     private HabilidadeEnum habilidadeTrabalhada;

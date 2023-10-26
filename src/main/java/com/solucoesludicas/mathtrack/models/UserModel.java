@@ -6,8 +6,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -15,19 +17,38 @@ import java.util.List;
 @Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserModel implements UserDetails {
+public class UserModel implements Serializable, UserDetails {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "uuid")
+    private UUID uuid;
+
     @Column(unique = true, nullable = false)
     private String login;
+
+    @Column(name = "nome", nullable = false, length = 100)
+    private String nome;
+
     @Column(unique = true, nullable = false)
     private String email;
+
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
     private UserRole role;
+
+    @Column(name = "telefone", length = 11, nullable = false)
+    private String telefone;
+
+    @Column(name = "especialistaId", unique = true)
+    private String especialistaId;
+
+    @Column(name = "criancaId")
+    private String criancaId;
 
     public UserModel(String login, String email, String password, UserRole role) {
         this.login = login;

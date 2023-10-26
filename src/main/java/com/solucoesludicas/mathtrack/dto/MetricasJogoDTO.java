@@ -12,12 +12,12 @@ import java.util.UUID;
 @Setter
 public class MetricasJogoDTO {
     private UUID criancaUUID;
-    private UUID especialistaUUID;
+    private String especialistaId;
     private long jogoID;
-    private int numeroDaFase;
-    private int dificuldadeDaFase;
-    private int numeroDeAcertos;
-    private int numeroDeErros;
+    private int numeroFase;
+    private int dificuldadeFase;
+    private int numeroAcertos;
+    private int numeroErros;
     private int tempoSessao;
     private HabilidadeEnum habilidadeTrabalhada;
     private PlataformaEnum plataforma;

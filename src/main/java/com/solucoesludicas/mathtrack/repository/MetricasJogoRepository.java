@@ -15,21 +15,23 @@ import java.util.UUID;
 @Repository
 public interface MetricasJogoRepository extends JpaRepository<MetricasJogoModel, Long>{
 
-        List<MetricasJogoModel> findAllByEspecialistaUUID(UUID uuid);
+        List<MetricasJogoModel> findAllByEspecialistaId(String id);
 
-        List<MetricasJogoModel> searchAllByCriancaUUIDAndHabilidadeTrabalhadaAndPlataformaAndDificuldadeDaFaseOrderById(
+        List<MetricasJogoModel> findAllByCriancaUUID(UUID id);
+
+        List<MetricasJogoModel> searchAllByCriancaUUIDAndHabilidadeTrabalhadaAndPlataformaAndDificuldadeFaseOrderById(
                 UUID uuid,
                 HabilidadeEnum habilidadetrabalhada,
                 PlataformaEnum plataforma,
                 Integer dificuldade);
 
-        @Query("SELECT DISTINCT m.dificuldadeDaFase FROM MetricasJogoModel m WHERE m.criancaUUID = :criancaUUID AND m.habilidadeTrabalhada = :habilidadeTrabalhada AND m.plataforma = :plataforma")
+        @Query("SELECT DISTINCT m.dificuldadeFase FROM MetricasJogoModel m WHERE m.criancaUUID = :criancaUUID AND m.habilidadeTrabalhada = :habilidadeTrabalhada AND m.plataforma = :plataforma")
         List<Integer> findDistinctDificuldadeDeFasesByCriancaUUIDAndHabilidadeTrabalhada(@Param("criancaUUID") UUID criancaUUID, @Param("habilidadeTrabalhada") HabilidadeEnum habilidadeTrabalhada, @Param("plataforma") PlataformaEnum plataforma);
 
         @Query("SELECT DISTINCT m.habilidadeTrabalhada FROM MetricasJogoModel m WHERE m.criancaUUID = :criancaUUID AND m.plataforma = :plataforma")
         List<HabilidadeEnum> findDistinctHabilidadeTrabalhadaByCriancaUUID(@Param("criancaUUID") UUID criancaUUID, @Param("plataforma") PlataformaEnum plataforma);
 
-        List<MetricasJogoModel> searchAllByCriancaUUIDAndCondicoesAdequadasAndHabilidadeTrabalhadaAndPlataformaAndDificuldadeDaFaseOrderById(
+        List<MetricasJogoModel> searchAllByCriancaUUIDAndCondicoesAdequadasAndHabilidadeTrabalhadaAndPlataformaAndDificuldadeFaseOrderById(
                 UUID uuid,
                 CondicoesAdequadasEnum condicoesAdequadas,
                 HabilidadeEnum habilidadetrabalhada,

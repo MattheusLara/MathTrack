@@ -116,8 +116,8 @@ public class GerarRelatorioServiceImpl implements GerarRelatorioService {
 
     private List<MetricasJogoModel> obterTodasMetricasValidasCriancaPorHabilidadEDificuldadeEPlataforma(UUID uuid, boolean somenteCondicoesAdequadas, HabilidadeEnum habilidadeTrabalhada, Integer dificuldade, PlataformaEnum plataforma){
         return somenteCondicoesAdequadas ?
-                metricasJogoRepository.searchAllByCriancaUUIDAndCondicoesAdequadasAndHabilidadeTrabalhadaAndPlataformaAndDificuldadeDaFaseOrderById(uuid, CondicoesAdequadasEnum.COND_ADEQUADAS, habilidadeTrabalhada, plataforma, dificuldade)
-                : metricasJogoRepository.searchAllByCriancaUUIDAndHabilidadeTrabalhadaAndPlataformaAndDificuldadeDaFaseOrderById(uuid, habilidadeTrabalhada, plataforma, dificuldade);
+                metricasJogoRepository.searchAllByCriancaUUIDAndCondicoesAdequadasAndHabilidadeTrabalhadaAndPlataformaAndDificuldadeFaseOrderById(uuid, CondicoesAdequadasEnum.COND_ADEQUADAS, habilidadeTrabalhada, plataforma, dificuldade)
+                : metricasJogoRepository.searchAllByCriancaUUIDAndHabilidadeTrabalhadaAndPlataformaAndDificuldadeFaseOrderById(uuid, habilidadeTrabalhada, plataforma, dificuldade);
     }
 
     private double calcularMedia(List<Double> valores){
@@ -142,14 +142,14 @@ public class GerarRelatorioServiceImpl implements GerarRelatorioService {
     
     private List<Double> obterListaDeAcertoPelasMetricas(List<MetricasJogoModel> metricasJogoDTOList){
         return metricasJogoDTOList.stream()
-                .mapToDouble(MetricasJogoModel::getNumeroDeAcertos)
+                .mapToDouble(MetricasJogoModel::getNumeroAcertos)
                 .boxed()
                 .toList();
     }
 
     private List<Double> obterListaDeErrosPelasMetricas(List<MetricasJogoModel> metricasJogoDTOList){
         return metricasJogoDTOList.stream()
-                .mapToDouble(MetricasJogoModel::getNumeroDeErros)
+                .mapToDouble(MetricasJogoModel::getNumeroErros)
                 .boxed()
                 .toList();
     }

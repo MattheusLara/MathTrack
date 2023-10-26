@@ -26,23 +26,23 @@ public class MetricasJogoModel implements Serializable {
     @Column(name = "crianca_uuid", nullable = false)
     private UUID criancaUUID;
 
-    @Column(name = "especialista_uuid", nullable = false)
-    private UUID especialistaUUID;
+    @Column(name = "especialista_id", nullable = false)
+    private String especialistaId;
 
     @Column(name = "jogo_id", nullable = false)
-    private long jogoID;
+    private long jogoId;
 
-    @Column(name = "numero_da_fase", nullable = false)
-    private int numeroDaFase;
+    @Column(name = "numero_fase", nullable = false)
+    private int numeroFase;
 
-    @Column(name = "dificuldade_da_fase", nullable = false)
-    private int dificuldadeDaFase;
+    @Column(name = "dificuldade_fase", nullable = false)
+    private int dificuldadeFase;
 
-    @Column(name = "numero_de_acertos", nullable = false)
-    private int numeroDeAcertos;
+    @Column(name = "numero_acertos", nullable = false)
+    private int numeroAcertos;
 
-    @Column(name = "numero_de_erros", nullable = false)
-    private int numeroDeErros;
+    @Column(name = "numero_erros", nullable = false)
+    private int numeroErros;
 
     @Column(name = "tempo_sessao")
     private int tempoSessao;

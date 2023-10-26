@@ -2,7 +2,8 @@ package com.solucoesludicas.mathtrack.models;
 
 public enum UserRole {
     ADMIN("admin"),
-    USER("user");
+    CUIDADOR("cuidador"),
+    ESPECIALISTA("especialista");
     private String role;
 
     UserRole(String role) {
