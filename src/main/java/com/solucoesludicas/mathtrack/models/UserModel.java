@@ -17,6 +17,7 @@ import java.util.UUID;
 @Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class UserModel implements Serializable, UserDetails {
 
     private static final long serialVersionUID = 1L;
@@ -29,7 +30,7 @@ public class UserModel implements Serializable, UserDetails {
     @Column(unique = true, nullable = false)
     private String login;
 
-    @Column(name = "nome", nullable = false, length = 100)
+    @Column(nullable = false, length = 100)
     private String nome;
 
     @Column(unique = true, nullable = false)
@@ -41,21 +42,13 @@ public class UserModel implements Serializable, UserDetails {
     @Column(nullable = false)
     private UserRole role;
 
-    @Column(name = "telefone", length = 11, nullable = false)
+    @Column(length = 11, nullable = false)
     private String telefone;
 
-    @Column(name = "especialistaId", unique = true)
+    @Column(unique = true)
     private String especialistaId;
 
-    @Column(name = "criancaId")
-    private String criancaId;
-
-    public UserModel(String login, String email, String password, UserRole role) {
-        this.login = login;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-    }
+    private UUID criancaUUID;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,7 @@ public class CriancasModel implements Serializable {
     private List<DiagnosticoCriancaModel> diagnosticos = new ArrayList<>();
 
     @Column(name = "data_de_nascimento", nullable = false)
-    private LocalDateTime dataDeNascimento;
+    private LocalDate dataDeNascimento;
 
     @Column(name = "endereco_rua")
     private String enderecoRua;
@@ -57,9 +58,6 @@ public class CriancasModel implements Serializable {
     @Column(name = "telefone_responsavel", length = 20)
     private String telefoneResponsavel;
 
-    @Column(name = "especialista_uuid")
-    private String especialistaUUID;
-
-    @Column(name = "cuidador_uuid")
-    private String cuidadorUUID;
+    @Column(name = "especialista_id")
+    private String especialistaID;
 }

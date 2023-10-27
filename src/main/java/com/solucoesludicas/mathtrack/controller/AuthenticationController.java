@@ -11,15 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("auth")
+@RequestMapping("user")
 public class AuthenticationController {
 
     @Autowired
@@ -43,7 +40,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity registrarUser(@RequestBody @Valid UserDto data){
+    public ResponseEntity register(@RequestBody @Valid UserDto data){
         if(!data.password().equals(data.repeatPassword())){
             return ResponseEntity.badRequest().build();
         }
@@ -52,7 +49,18 @@ public class AuthenticationController {
             return ResponseEntity.badRequest().build();
         }
 
-        this.userService.registerUser(data);
+        try {
+            this.userService.registerUser(data);
+        }  catch (Exception e) {
+            throw new RuntimeException();
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/link/{login}/child")
+    public ResponseEntity update(@PathVariable String login, @RequestBody String cpf){
+        this.userService.updateUser(login, cpf);
         return ResponseEntity.ok().build();
     }
 }
