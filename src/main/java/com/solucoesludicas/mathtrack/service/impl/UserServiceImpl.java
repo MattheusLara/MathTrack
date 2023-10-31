@@ -1,6 +1,7 @@
 package com.solucoesludicas.mathtrack.service.impl;
 
 import com.solucoesludicas.mathtrack.dto.UserDto;
+import com.solucoesludicas.mathtrack.exception.NotFoundException;
 import com.solucoesludicas.mathtrack.models.UserModel;
 import com.solucoesludicas.mathtrack.repository.CriancasRepository;
 import com.solucoesludicas.mathtrack.repository.UserRepository;
@@ -35,12 +36,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(String login, String cpf) {
+    public void updateUser(String login, String cpf) throws NotFoundException {
         var user = userRepository.findByLogin(login);
         var crianca = criancasRepository.findByCpf(cpf);
 
-        if(crianca == null || user == null){
-          throw new RuntimeException(); //criança nao encontrada para o cpf informado
+        if(user == null){
+            throw new NotFoundException("Requisição inválida", "Usuário não o para o login informado");
+        }
+
+        if(crianca == null){
+          throw new NotFoundException("Requisição inválida", "Criança não encontrada para o CPF informado");
         }
 
         user.setCriancaUUID(crianca.getUuid());

@@ -141,6 +141,7 @@
 						</exclude>
 					</excludes>
 					<arguments>
+						<logger name="com.solucoesludicas.mathtrack.exception" level="ERROR" />
 						<argument>--spring.config.additional-location=${project.basedir}/src/main/resources/logback.xml</argument>
 					</arguments>
 				</configuration>

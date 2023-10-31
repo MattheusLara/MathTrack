@@ -1,5 +1,6 @@
 package com.solucoesludicas.mathtrack.service.impl;
 
+import com.solucoesludicas.mathtrack.exception.NotFoundException;
 import com.solucoesludicas.mathtrack.models.MetricasCompletasModel;
 import com.solucoesludicas.mathtrack.models.MetricasJogoModel;
 import com.solucoesludicas.mathtrack.models.UserRole;
@@ -14,9 +15,7 @@ import org.springframework.stereotype.Service;
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,10 +32,16 @@ public class SalvarMetricaServiceImpl implements MetricaService {
 
     @Override
     @Transactional
-    public void execute(MetricasJogoModel metricasJogoModel) {
-        metricasJogoRepository.save(metricasJogoModel);
+    public void execute(MetricasJogoModel metricasJogoModel) throws NotFoundException {
         var especialista = repository.findByEspecialistaId(metricasJogoModel.getEspecialistaId());
-        sendSms(especialista.getTelefone());
+        
+        if(especialista == null){
+            throw new NotFoundException("Requisição inválida", "Especialista não encontrado para o login informado");
+        }
+
+        metricasJogoRepository.save(metricasJogoModel);
+        
+        //sendSms(especialista.getTelefone());
     }
 
     public void sendSms(String telefone) {
@@ -51,25 +56,30 @@ public class SalvarMetricaServiceImpl implements MetricaService {
     }
 
     @Override
-    public List<MetricasCompletasModel> getAllMetricasByIdentifier(String role, String identificador) {
+    public List<MetricasCompletasModel> getAllMetricasByIdentifier(String login) throws NotFoundException {
 
-        var metricas = role.equals(UserRole.ESPECIALISTA.getRole()) ? getAllMetricasByEspecialista(identificador) : getAllMetricasByCrianca(identificador);
+        var user = repository.findByLogin(login);
+
+        if(user == null){
+            throw new NotFoundException("Requisição inválida", "Usuário não encontrado para o login informado");
+        }
+
+        var metricas = user.getRole().equals(UserRole.ESPECIALISTA) ? getAllMetricasByEspecialista(user.getEspecialistaId()) : getAllMetricasByCrianca(user.getCriancaUUID());
 
         return metricas.stream()
-                .map(metricasJogoModel -> {
-                    var metricasCompletas = buildMetricasCompletas(metricasJogoModel);
-
-                    return metricasCompletas.orElse(null);
-                })
+                .map(metricasJogoModel -> buildMetricasCompletas(metricasJogoModel).orElse(null))
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
     private List<MetricasJogoModel> getAllMetricasByEspecialista(String identificador){
+        if (identificador.isEmpty()) return new ArrayList<>();
         return metricasJogoRepository.findAllByEspecialistaId(identificador);
     }
 
-    private List<MetricasJogoModel> getAllMetricasByCrianca(String identificador){
-        return metricasJogoRepository.findAllByCriancaUUID(UUID.fromString(identificador));
+    private List<MetricasJogoModel> getAllMetricasByCrianca(UUID identificador){
+        if (identificador == null) return new ArrayList<>();
+        return metricasJogoRepository.findAllByCriancaUUID(identificador);
     }
 
     private Optional<MetricasCompletasModel> buildMetricasCompletas(MetricasJogoModel metricaJogo){

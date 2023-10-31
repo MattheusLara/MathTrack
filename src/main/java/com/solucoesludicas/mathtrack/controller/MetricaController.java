@@ -1,6 +1,7 @@
 package com.solucoesludicas.mathtrack.controller;
 
 import com.solucoesludicas.mathtrack.dto.MetricasJogoDTO;
+import com.solucoesludicas.mathtrack.exception.NotFoundException;
 import com.solucoesludicas.mathtrack.models.MetricasCompletasModel;
 import com.solucoesludicas.mathtrack.models.MetricasJogoModel;
 import com.solucoesludicas.mathtrack.service.MetricaService;
@@ -21,7 +22,7 @@ public class MetricaController {
     private final MetricaService metricaService;
 
     @PostMapping("/save")
-    public ResponseEntity salvarMetrica(@RequestBody MetricasJogoDTO metricasJogoDTO){
+    public ResponseEntity salvarMetrica(@RequestBody MetricasJogoDTO metricasJogoDTO) throws NotFoundException {
         var metricasJogoModel = new MetricasJogoModel();
         BeanUtils.copyProperties(metricasJogoDTO, metricasJogoModel);
 
@@ -30,8 +31,8 @@ public class MetricaController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/list/{role}/{id}")
-    public ResponseEntity<List<MetricasCompletasModel>> getMetrica(@PathVariable String role, @PathVariable String identifier){
-        return ResponseEntity.ok(metricaService.getAllMetricasByIdentifier(role, identifier));
+    @GetMapping("/list/{login}")
+    public ResponseEntity<List<MetricasCompletasModel>> getMetrica(@PathVariable String login) throws NotFoundException {
+        return ResponseEntity.ok(metricaService.getAllMetricasByIdentifier(login));
     }
 }
