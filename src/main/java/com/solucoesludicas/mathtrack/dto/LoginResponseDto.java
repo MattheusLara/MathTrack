@@ -1,5 +1,5 @@
 package com.solucoesludicas.mathtrack.dto;
 
-public record LoginResponseDto(String token, String login) {
+public record LoginResponseDto(String token, String login, String role) {
     
 }

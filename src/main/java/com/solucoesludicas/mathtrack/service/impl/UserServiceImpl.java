@@ -28,6 +28,7 @@ public class UserServiceImpl implements UserService {
                 .nome(data.nome())
                 .password(encryptedPassword)
                 .role(data.role())
+                .cpf(data.cpf())
                 .telefone(data.telefone())
                 .especialistaId(data.especialistaId())
                 .build();
@@ -36,9 +37,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(String login, String cpf) throws NotFoundException {
-        var user = userRepository.findByLogin(login);
-        var crianca = criancasRepository.findByCpf(cpf);
+    public void updateUser(String userCpf, String childCpf) throws NotFoundException {
+        var user = userRepository.findByCpf(userCpf);
+        var crianca = criancasRepository.findByCpf(childCpf);
 
         if(user == null){
             throw new NotFoundException("Requisição inválida", "Usuário não o para o login informado");

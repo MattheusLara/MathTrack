@@ -33,6 +33,9 @@ public class UserModel implements Serializable, UserDetails {
     @Column(nullable = false, length = 100)
     private String nome;
 
+    @Column(nullable = false, length = 11)
+    private String cpf;
+
     @Column(unique = true, nullable = false)
     private String email;
 
